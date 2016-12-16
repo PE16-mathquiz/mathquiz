@@ -1,3 +1,0 @@
-/**
- * Mathquiz.java
- */
