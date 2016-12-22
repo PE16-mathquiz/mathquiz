@@ -8,14 +8,21 @@ class Model {
     private String bin; //2進数の問題の数
     private String oct; //8進数の問題の数
     private String hex; //16進数の問題の数
+
+    //問題の形式をきめるフラグ
+    //0:２進数->10進数 1:8進数->10進数 2:16進数->10進数
+    private int type;
 	
     //コンストラクタ
-    public Model(){
+    public Model(int t){
 	    dec_int = (int)(Math.random() * Math.pow(2, 10));
+	    dec_int = 100;
 	    dec = String.valueOf(dec_int);
 	    bin = Integer.toBinaryString(dec_int);
 	    oct = Integer.toOctalString(dec_int);
 	    hex = Integer.toHexString(dec_int).toUpperCase();
+
+	    this.type = t;
     }
     
     //print関数
@@ -31,14 +38,31 @@ class Model {
     public void print_hex(){
 	System.out.println("16進数: " + hex);
     }
+
+    //問題を表示する関数
+    public void print_q(){
+	String question = "none";
+	switch(type){
+	case 0:
+	    question = String.format("%10s", bin).replace(' ', '0');
+	    System.out.println("次の2進数を10進数に変換しなさい");
+	    break;
+	case 1:
+	    question = String.format("%4s", oct).replace(' ', '0');
+	    System.out.println("次の8進数を10進数に変換しなさい");
+	    break;
+	case 2:
+	    question = String.format("%3s", hex).replace(' ', '0');
+	    System.out.println("次の16進数を10進数に変換しなさい");
+	    break;
+	}
+	System.out.println(question);
+    }
 }
 
 class ModelMain{
     public static void main(String[] args){
-	Model sample = new Model();
-	sample.print_dec();
-	sample.print_bin();
-	sample.print_oct();
-	sample.print_hex();
+	Model dec = new Model(0);
+	dec.print_q();
     }
 }
