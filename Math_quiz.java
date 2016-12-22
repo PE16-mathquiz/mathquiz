@@ -14,7 +14,7 @@ class CalcModel extends Observable{
 
     public void setValue(String s){
 	value=Integer.parseInt(s);
-	System.out.println(value);
+	System.out.println(value); //valueに値が入っているかの確認。ターミナル上に表示。
     }
 }
 
