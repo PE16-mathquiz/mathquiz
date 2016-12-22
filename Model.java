@@ -17,7 +17,6 @@ class Model {
     //コンストラクタ
     public Model(int q, int s){
 	    dec_int = (int)(Math.random() * Math.pow(2, 10));
-	    dec_int = 100;
 	    dec = String.valueOf(dec_int);
 	    bin = Integer.toBinaryString(dec_int);
 	    oct = Integer.toOctalString(dec_int);
@@ -46,13 +45,16 @@ class Model {
 	String str = "none";
 	System.out.printf("次の%d進数を%d進数に変換しなさい", que, sol);
 	switch(que){
-	case 0:
+	case 2:
 	    str = String.format("%10s", bin).replace(' ', '0');
 	    break;
-	case 1:
+	case 8:
 	    str = String.format("%4s", oct).replace(' ', '0');
 	    break;
-	case 2:
+	case 10:
+	    str = String.format("%4s", dec).replace(' ', '0');
+	    break;
+	case 16:
 	    str = String.format("%3s", hex).replace(' ', '0');
 	    break;
 	}
@@ -60,7 +62,7 @@ class Model {
     }
 
     //答えを入力してもらって確認する
-    public String ans_q(){
+    public void ans_q(){
 	String reply = "none";
 	String answer = "none";
 	Scanner scan = new Scanner(System.in);
@@ -68,7 +70,27 @@ class Model {
 	System.out.println("答えを入力してください");
 	reply = scan.next();
 
-	if(answer.equals
+	switch(sol){
+	case 2:
+	    answer = bin;
+	    break;
+	case 8:
+	    answer = oct;
+	    break;
+	case 10:
+	    answer = dec;
+	    break;
+	case 16:
+	    answer = hex;
+	    break;
+	}
+
+	if(reply.equals(answer)){
+	    System.out.println("正解!!");
+	}
+	else{
+	    System.out.println("不正解..");
+	}
     }
 }
 
@@ -76,6 +98,7 @@ class ModelMain{
     public static void main(String[] args){
 	Model dec = new Model(2, 10);
 	
+	dec.print_dec();
 	dec.print_q();
 	dec.ans_q();
     }
