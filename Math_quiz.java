@@ -18,6 +18,7 @@ class CalcModel extends Observable{
     }
 }
 
+//入力フォームの前身
 class CalcForm extends JTextField implements Observer,ActionListener{
     private CalcModel calcmodel;
     public CalcForm(CalcModel cm){
@@ -39,6 +40,7 @@ class CalcForm extends JTextField implements Observer,ActionListener{
     }
 }
 
+//とりあえずの枠組み
 class CalcView extends JFrame{
     private CalcModel calcmodel=new CalcModel();
     public CalcView(){
