@@ -10,11 +10,12 @@ class Model {
     private String hex; //16進数の問題の数
 
     //問題の形式をきめるフラグ
-    //0:２進数->10進数 1:8進数->10進数 2:16進数->10進数
-    private int type;
+    //2:２進数 8:8進数 10:10進数 16:16進数
+    private int que; //問題の基数
+    private int sol; //答えの基数
 	
     //コンストラクタ
-    public Model(int t){
+    public Model(int q, int s){
 	    dec_int = (int)(Math.random() * Math.pow(2, 10));
 	    dec_int = 100;
 	    dec = String.valueOf(dec_int);
@@ -22,7 +23,8 @@ class Model {
 	    oct = Integer.toOctalString(dec_int);
 	    hex = Integer.toHexString(dec_int).toUpperCase();
 
-	    this.type = t;
+	    this.que = q;
+	    this.sol = s;
     }
     
     //print関数
@@ -41,28 +43,40 @@ class Model {
 
     //問題を表示する関数
     public void print_q(){
-	String question = "none";
-	switch(type){
+	String str = "none";
+	System.out.printf("次の%d進数を%d進数に変換しなさい", que, sol);
+	switch(que){
 	case 0:
-	    question = String.format("%10s", bin).replace(' ', '0');
-	    System.out.println("次の2進数を10進数に変換しなさい");
+	    str = String.format("%10s", bin).replace(' ', '0');
 	    break;
 	case 1:
-	    question = String.format("%4s", oct).replace(' ', '0');
-	    System.out.println("次の8進数を10進数に変換しなさい");
+	    str = String.format("%4s", oct).replace(' ', '0');
 	    break;
 	case 2:
-	    question = String.format("%3s", hex).replace(' ', '0');
-	    System.out.println("次の16進数を10進数に変換しなさい");
+	    str = String.format("%3s", hex).replace(' ', '0');
 	    break;
 	}
-	System.out.println(question);
+	System.out.println(str);
+    }
+
+    //答えを入力してもらって確認する
+    public String ans_q(){
+	String reply = "none";
+	String answer = "none";
+	Scanner scan = new Scanner(System.in);
+	
+	System.out.println("答えを入力してください");
+	reply = scan.next();
+
+	if(answer.equals
     }
 }
 
 class ModelMain{
     public static void main(String[] args){
-	Model dec = new Model(0);
+	Model dec = new Model(2, 10);
+	
 	dec.print_q();
+	dec.ans_q();
     }
 }
