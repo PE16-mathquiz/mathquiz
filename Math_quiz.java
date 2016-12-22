@@ -5,11 +5,15 @@ import java.awt.event.*;
 import java.util.*;
 import java.util.Random;
 
-class CalcForm extends JTextField{
+class CalcModel extends Observable{
+
+}
+
+class CalcForm extends JTextField implements Observer, ActionLister{
+    private CalcModel calcmodel;
     public CalcForm(){
 	super(10);
 	this.setFont(new Font(Font.SANS_SERIF,Font.BOLD,26));
-	this.setSize(200,100);
     }
 }
 
