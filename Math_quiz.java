@@ -14,6 +14,7 @@ class CalcModel extends Observable{
 
     public void setValue(String s){
 	value=Integer.parseInt(s);
+	System.out.println(value);
     }
 }
 
