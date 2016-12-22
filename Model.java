@@ -49,7 +49,7 @@ class Model {
 	    str = String.format("%10s", bin).replace(' ', '0');
 	    break;
 	case 8:
-	    str = oct;
+	    str = "0" + oct;
 	    break;
 	case 10:
 	    str = dec;
