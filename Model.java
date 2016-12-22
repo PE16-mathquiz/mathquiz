@@ -17,10 +17,6 @@ class Model {
     //コンストラクタ
     public Model(int q, int s){
 	    dec_int = (int)(Math.random() * Math.pow(2, 10));
-<<<<<<< HEAD
-=======
-	    dec_int = 100;
->>>>>>> 30c72bb216e877366846857e3a599d5a56503428
 	    dec = String.valueOf(dec_int);
 	    bin = Integer.toBinaryString(dec_int);
 	    oct = Integer.toOctalString(dec_int);
@@ -47,40 +43,26 @@ class Model {
     //問題を表示する関数
     public void print_q(){
 	String str = "none";
-	System.out.printf("次の%d進数を%d進数に変換しなさい", que, sol);
+	System.out.printf("次の%d進数を%d進数に変換しなさい\n", que, sol);
 	switch(que){
-<<<<<<< HEAD
 	case 2:
 	    str = String.format("%10s", bin).replace(' ', '0');
 	    break;
 	case 8:
-	    str = String.format("%4s", oct).replace(' ', '0');
+	    str = oct;
 	    break;
 	case 10:
-	    str = String.format("%4s", dec).replace(' ', '0');
+	    str = dec;
 	    break;
 	case 16:
-=======
-	case 0:
-	    str = String.format("%10s", bin).replace(' ', '0');
-	    break;
-	case 1:
-	    str = String.format("%4s", oct).replace(' ', '0');
-	    break;
-	case 2:
->>>>>>> 30c72bb216e877366846857e3a599d5a56503428
-	    str = String.format("%3s", hex).replace(' ', '0');
+	    str = "0x" + hex;
 	    break;
 	}
 	System.out.println(str);
     }
 
     //答えを入力してもらって確認する
-<<<<<<< HEAD
     public void ans_q(){
-=======
-    public String ans_q(){
->>>>>>> 30c72bb216e877366846857e3a599d5a56503428
 	String reply = "none";
 	String answer = "none";
 	Scanner scan = new Scanner(System.in);
@@ -88,7 +70,6 @@ class Model {
 	System.out.println("答えを入力してください");
 	reply = scan.next();
 
-<<<<<<< HEAD
 	switch(sol){
 	case 2:
 	    answer = bin;
@@ -110,20 +91,15 @@ class Model {
 	else{
 	    System.out.println("不正解..");
 	}
-=======
-	if(answer.equals
->>>>>>> 30c72bb216e877366846857e3a599d5a56503428
     }
 }
 
 class ModelMain{
     public static void main(String[] args){
-	Model dec = new Model(2, 10);
+	Model dec = new Model(8, 10);
 	
-<<<<<<< HEAD
+	dec.print_oct();
 	dec.print_dec();
-=======
->>>>>>> 30c72bb216e877366846857e3a599d5a56503428
 	dec.print_q();
 	dec.ans_q();
     }
