@@ -111,7 +111,7 @@ class Model {
 	    System.out.println("不正解..");
 	}
 =======
-	if(answer.equals
+if(answer.equals(
 >>>>>>> 30c72bb216e877366846857e3a599d5a56503428
     }
 }
