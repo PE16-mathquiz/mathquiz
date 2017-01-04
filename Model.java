@@ -45,7 +45,7 @@ class Model extends Observable{
 		case 16:
 	    	quenum = "0x" + hex;
 	    	break;
-	    }
+		}
 		
 		answer = "none";
 		switch(sol){
@@ -62,6 +62,7 @@ class Model extends Observable{
 	    	answer = hex;
 	    	break;
 		}
+
     }
     
     //get関数
