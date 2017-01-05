@@ -27,7 +27,7 @@ class CalcModel extends Observable{
     private String answer; //答え
 	
     //正解数
-    private int count=0;
+    private int count=0;//簡単なスコアカウンター→０で初期化
 
     //コンストラクタ
     public CalcModel(int q, int s){
@@ -104,8 +104,8 @@ class CalcModel extends Observable{
     //答えを入力してもらって確認する
     public String ans_q(){
     	String reply = value.toUpperCase();  //入力された16進数が小文字でも正解と判定するため
-	String correct="正解！！";
-	String Ncorrect="不正解..";
+	String correct="正解！！";//ActionListener煮かえすための文字列
+	String Ncorrect="不正解..";//同上
 	
     	if(reply.equals(answer)){
 	    count++;
@@ -135,6 +135,8 @@ class CalcModel extends Observable{
 //入力フォームの前身
 class CalcForm extends JTextField implements Observer,ActionListener{
     private CalcModel calcmodel;
+
+    //コンストラクタ
     public CalcForm(CalcModel cm){
 	super(10);
 	calcmodel=cm;
@@ -158,17 +160,16 @@ class CalcForm extends JTextField implements Observer,ActionListener{
 class CalcView extends JFrame implements ActionListener{
     private CalcModel calcmodel=new CalcModel(10,16);
     //private CalcButton calcbutton=new CalcButton();
-    private String quejp,quenum;
-    private JLabel l1;
-    private JButton b2;
+    private String quejp,quenum;//問題文と出題内容の変数
+    private JLabel l1;//問題文を表示するためのラベル変数
+    private JButton b1,b2;//継続終了を選択するためのボタン変数
+
+    //コンストラクタ
     public CalcView(){
 	quejp=calcmodel.get_quejp();
 	quenum=calcmodel.get_quenum();
 	JPanel p1=new JPanel(),p2=new JPanel(),p3=new JPanel();
 	l1=new JLabel(quejp+quenum);
-	JLabel l2;
-	//JButton b2=new JButton("Center!!");
-	//JButton b3=new JButton("South!!");
 	this.setTitle("Calcuration Quiz");
 	this.setLayout(new GridLayout(3,1));
 	this.add(p1);
@@ -179,9 +180,9 @@ class CalcView extends JFrame implements ActionListener{
 	p1.add(l1);
 	//中段:問題回答フォーム
 	p2.add(new CalcForm(calcmodel));
-	//下段:継続選択ボタン
+	//下段:継続選択ボタン→なぜか中段にまとまってしまった。
 	p3.setLayout(new GridLayout(1,2));
-	JButton b1=new JButton("終了");
+	b1=new JButton("終了");
 	b2=new JButton("続ける");
 	p2.add(b1);
 	p2.add(b2);
@@ -198,19 +199,22 @@ class CalcView extends JFrame implements ActionListener{
   //継続or終了ActionListener
     public void actionPerformed(ActionEvent e){
 	String es=e.getActionCommand();
-	if(es.equals("finish")){
+	if(es.equals("finish")){//終了ボタンを押した場合
 	    this.l1.setText(calcmodel.ans_q());
 
+	    //終了を押したときにシステムをすべて落とすためのコード
 	    Component c = (Component)e.getSource();
 	    Window w = SwingUtilities.getWindowAncestor(c);
 	    w.dispose();
-	}else if(es.equals("continue")){
+
+	}else if(es.equals("continue")){//継続ボタンを押した場合
 	    calcmodel.reset();
 	    this.l1.setText(calcmodel.ans_q());
-	    try{
-		Thread.sleep(5000);
-	    }catch(InterruptedException ee){}
-
+	    /*処理を一時停止させるための部分
+	      try{
+	      Thread.sleep(5000);
+	      }catch(InterruptedException ee){}
+	    */
 	    new CalcView();
 	}
     }
@@ -220,20 +224,25 @@ class CalcView extends JFrame implements ActionListener{
     }
 }
 
-class CalcController{
-    private CalcModel calcmodel=new CalcModel(10,16);
-    private CalcForm calcform=new CalcForm(calcmodel);
-    private CalcView calcview=new CalcView();
-    private String consequens;//正解or不正解
+/*
+アップデート内容
+・継続、終了ボタンの実装。終了ボタンを押すとシステムがすべて終了するようにしました。(１０進→１６進に限る)
+・問題のランダム出題実装。
+・次へのボタンを押すことで正誤判断。→自動的に次のランダム問題を出題。
+・
 
-    //コンストラクタ
-    public CalcController(){
+問題点
+・回答入力後、スペースキーを押さなければ回答が確定せず、うっかり次へのボタンを押してしまうととんでもない量のエラーで怒られる
+・回答の正誤確認画面に切り替わる時間が短く、あっているのかあっていないのかがわからない。
+  →wait(),Thread.sleep()を入れてみたがなかなか改善されなかった。
 
-    }
+次回まで、または次回からやること
+・コントローラークラスを導入。ActionListenerなどを補完してほかの部分をすっきりさせる。
+・次に出題される基数の組合わせを変えることができるようにする。
+  →ボタンの個数を押すごとに変えれるようにすると、多少はやりやすいか...?
+・終了するときにやってきた問題のスコアを表示できるようにすれば、ちょっとは使い手側に親切か...。
 
-    //正誤判定
-    public void judge(){
-	consequens=calcmodel.ans_q();
+とりあえず問題出題→回答入力(スペースキーで確定)→次へボタンを押して次のランダム問題出題→......
+まではものになりました。
 
-    }
-}
+ */
