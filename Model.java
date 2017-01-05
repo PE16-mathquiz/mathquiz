@@ -40,6 +40,12 @@ class Model extends Observable{
     public String get_quenum(){
     	return quenum;
     }
+    public int get_Qbase(){
+	return que;
+    }
+    public int get_Sbase(){
+	return sol;
+    }
     
     //print関数
     public void print_all(){
@@ -98,14 +104,15 @@ class Model extends Observable{
     }
 
     //答えを入力してもらって確認する
-    public void ans_q(String r){
-    	String reply = r.toUpperCase();  //入力された16進数が小文字でも正解と判定するため
+    public String ans_q(String r){
+    	String reply = r.toUpperCase();//入力された16進数が小文字でも正解と判定するため
     	
+	//場合によって文章は変更
     	if(reply.equals(answer)){
-	    System.out.println("正解!!");
+	    return("正解!!"); //正解のときの文章を文字列として返す
 	}
 	else{
-	    System.out.println("不正解..");
+	    return("不正解.."); //不正解のときの文章を文字列として返す
 	}
     }
 }
@@ -114,12 +121,78 @@ class ModelMain{
     public static void main(String[] args){
     	int question = 10;
     	int solution = 16;
-	Model model = new Model(question, solution);
 	String reply = "none";
 	Scanner scan = new Scanner(System.in);
 	int reset_flag; //問題をリセットするかどうかのフラグ
 	int change_flag; //基数を変更するかどうかのフラグ
-	boolean q_flag, s_flag; //基数が入力されたどうかのフラグ
+	boolean q_flag = false, s_flag = false; //基数が入力されたどうかのフラグ
+
+	//問題の基数を設定する
+	do{
+	    String que_c = "none";
+	    System.out.println("問題の基数を入力してください");
+	    System.out.printf("現在の問題の基数: %d\n", question);
+	    System.out.println("2 or 8 or 10 or 16 (整数のみを入力)");
+	    que_c = scan.next();
+	    
+	    try{
+		int temp_q = Integer.parseInt(que_c);
+		
+		switch(temp_q){
+		case 2:
+		case 8:
+		case 10:
+		case 16:
+		    question = temp_q;
+		    q_flag = true;
+		    break;
+		default:
+		    System.out.println("決められた整数を入力してください\n");
+		    break;
+		}
+	    }
+	    catch(NumberFormatException e){
+		System.out.println("整数のみを入力してください\n");
+		continue;
+	    }
+	}while(!q_flag);
+	
+	//答えの基数を設定する
+	do{
+	    String sol_c = "none";
+	    System.out.println("答えの基数を入力してください");
+	    System.out.printf("現在の答えの基数: %d\n", solution);
+	    System.out.println("2 or 8 or 10 or 16 (整数のみを入力)");
+	    sol_c = scan.next();
+	    
+	    try{
+		int temp_s = Integer.parseInt(sol_c);
+		
+		switch(temp_s){
+		case 2:
+		case 8:
+		case 10:
+		case 16:
+		    if(question == temp_s){
+			System.out.println("問題とは違う基数を入力してください\n");
+			break;
+		    }
+		    solution = temp_s;
+		    s_flag = true;
+		    break;
+		default:
+		    System.out.println("決められた整数を入力してください\n");
+		    break;
+		}
+	    }
+	    catch(NumberFormatException e){
+		System.out.println("整数のみを入力してください\n");
+		continue;
+	    }					
+	}while(!s_flag);
+	
+	//Modelの作成
+	Model model = new Model(question, solution);
 	
 	do{
 	    //フラグの初期化
@@ -135,13 +208,13 @@ class ModelMain{
 	    //答えの入力
 	    System.out.println("答えを入力してください");
 	    reply = scan.next();
-	    model.ans_q(reply);
+	    System.out.println(model.ans_q(reply));
 	    
 	    //やり直すかの確認
 	    do{
 		String reset_c = "none";
 		System.out.println("もう一度やりますか?");
-		System.out.println("はい: \"y\" or \"yes\" / いいえ: \"n or \"no");
+		System.out.println("はい: \"y\" or \"yes\" / いいえ: \"n\" or \"no\"");
 		reset_c = scan.next();
 		
 		if(reset_c.equals("y") || reset_c.equals("yes")){
@@ -160,7 +233,7 @@ class ModelMain{
 	    do{
 		String change_c = "none";
 		System.out.println("問題の基数を変更しますか?");
-		System.out.println("はい: \"y\" or \"yes\" / いいえ: \"n or \"no");
+		System.out.println("はい: \"y\" or \"yes\" / いいえ: \"n\" or \"no\"");
 		change_c = scan.next();
 		
 		if(change_c.equals("y") || change_c.equals("yes")){
