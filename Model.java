@@ -114,6 +114,10 @@ class Model extends Observable{
 	else{
 	    return("不正解.."); //不正解のときの文章を文字列として返す
 	}
+
+	//Observerに変更を通知する
+	setChanged();
+	notifyObservers();
     }
 }
 
