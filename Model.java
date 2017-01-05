@@ -106,6 +106,10 @@ class Model extends Observable{
     //答えを入力してもらって確認する
     public String ans_q(String r){
     	String reply = r.toUpperCase();//入力された16進数が小文字でも正解と判定するため
+
+	/*Observerに変更を通知する
+	setChanged();
+	notifyObservers();*/
     	
 	//場合によって文章は変更
     	if(reply.equals(answer)){
@@ -115,9 +119,6 @@ class Model extends Observable{
 	    return("不正解.."); //不正解のときの文章を文字列として返す
 	}
 
-	//Observerに変更を通知する
-	setChanged();
-	notifyObservers();
     }
 }
 
