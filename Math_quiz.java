@@ -202,7 +202,7 @@ class CalcView extends JFrame implements ActionListener{
 	if(es.equals("finish")){//終了ボタンを押した場合
 	    this.l1.setText(calcmodel.ans_q());
 
-	    //終了を押したときにシステムをすべて落とすためのコード
+	    //終了を押したときにシステムをすべて落とすためのコード→終了もスペースキーで回答を確定していなければできない模様。
 	    Component c = (Component)e.getSource();
 	    Window w = SwingUtilities.getWindowAncestor(c);
 	    w.dispose();
@@ -226,17 +226,20 @@ class CalcView extends JFrame implements ActionListener{
 
 /*
 アップデート内容
+2017/1/5
 ・継続、終了ボタンの実装。終了ボタンを押すとシステムがすべて終了するようにしました。(１０進→１６進に限る)
 ・問題のランダム出題実装。
 ・次へのボタンを押すことで正誤判断。→自動的に次のランダム問題を出題。
 ・
 
 問題点
+2017/1/5
 ・回答入力後、スペースキーを押さなければ回答が確定せず、うっかり次へのボタンを押してしまうととんでもない量のエラーで怒られる
 ・回答の正誤確認画面に切り替わる時間が短く、あっているのかあっていないのかがわからない。
   →wait(),Thread.sleep()を入れてみたがなかなか改善されなかった。
 
 次回まで、または次回からやること
+2017/1/5
 ・コントローラークラスを導入。ActionListenerなどを補完してほかの部分をすっきりさせる。
 ・次に出題される基数の組合わせを変えることができるようにする。
   →ボタンの個数を押すごとに変えれるようにすると、多少はやりやすいか...?
