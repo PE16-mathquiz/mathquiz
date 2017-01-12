@@ -127,28 +127,31 @@ class CalcModel extends Observable{
     public void setValue(String s){
 	value=s; //String出処理をするため直す必要なし。
 	System.out.println(value); //valueに値が入っているかの確認。ターミナル上に表示。
+
+	setChanged();
+	notifyObservers();
     }
 }
 
 
 
 //入力フォームの前身
-class CalcForm extends JTextField implements Observer,ActionListener{
+class CalcForm extends JTextField implements ActionListener{
     private CalcModel calcmodel;
 
     //コンストラクタ
     public CalcForm(CalcModel cm){
 	super(10);
 	calcmodel=cm;
-	calcmodel.addObserver(this); //Observerの登録
+	//calcmodel.addObserver(this); //Observerの登録
 	this.setFont(new Font(Font.SANS_SERIF,Font.BOLD,26));
 	this.addActionListener(this);
     }
 
-    public void update (Observable o,Object arg){
+    /*public void update (Observable o,Object arg){
 	String s=calcmodel.getValue();
 	setText(s);
-    }
+	}*/
 
     public void actionPerformed(ActionEvent e){
 	String s=this.getText();
@@ -157,50 +160,57 @@ class CalcForm extends JTextField implements Observer,ActionListener{
 }
 
 //とりあえずの枠組み
-class CalcView extends JFrame implements ActionListener{
+class CalcView extends JFrame implements Observer,ActionListener{
     private CalcModel calcmodel=new CalcModel(10,16);
+    private CalcForm calcform = new CalcForm(calcmodel);
     //private CalcButton calcbutton=new CalcButton();
     private String quejp,quenum;//問題文と出題内容の変数
-    private JLabel l1;//問題文を表示するためのラベル変数
-    private JButton b1,b2;//継続終了を選択するためのボタン変数
+    private JLabel qlabel;//問題文を表示するためのラベル変数
+    private JButton cont,fin;//継続終了を選択するためのボタン変数
 
     //コンストラクタ
     public CalcView(){
 	quejp=calcmodel.get_quejp();
 	quenum=calcmodel.get_quenum();
 	JPanel p1=new JPanel(),p2=new JPanel(),p3=new JPanel();
-	l1=new JLabel(quejp+quenum);
+	qlabel=new JLabel(quejp+quenum);
 	this.setTitle("Calcuration Quiz");
 	this.setLayout(new GridLayout(3,1));
 	this.add(p1);
 	this.add(p2);
 	this.add(p3);
 
+	calcmodel.addObserver(this);
+
 	//上段:問題文
-	p1.add(l1);
+	p1.add(qlabel);
 	//中段:問題回答フォーム
-	p2.add(new CalcForm(calcmodel));
+	p2.add(calcform);
 	//下段:継続選択ボタン→なぜか中段にまとまってしまった。
 	p3.setLayout(new GridLayout(1,2));
-	b1=new JButton("終了");
-	b2=new JButton("続ける");
-	p2.add(b1);
-	p2.add(b2);
-	b1.setActionCommand("finish");
-	b2.setActionCommand("continue");
-	b1.addActionListener(this);
-	b2.addActionListener(this);
+	fin=new JButton("終了");
+	cont=new JButton("続ける");
+	p2.add(fin);
+	p2.add(cont);
+	fin.setActionCommand("finish");
+	cont.setActionCommand("continue");
+	fin.addActionListener(this);
+	cont.addActionListener(this);
 
 	this.pack();
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	this.setVisible(true);
     }
 
+    public void update(Observable o,Object arg){
+	this.qlabel.setText(calcmodel.ans_q());
+    }
+
   //継続or終了ActionListener
     public void actionPerformed(ActionEvent e){
 	String es=e.getActionCommand();
 	if(es.equals("finish")){//終了ボタンを押した場合
-	    this.l1.setText(calcmodel.ans_q());
+	    //this.qlabel.setText(calcmodel.ans_q());
 
 	    //終了を押したときにシステムをすべて落とすためのコード→終了もスペースキーで回答を確定していなければできない模様。
 	    Component c = (Component)e.getSource();
@@ -209,13 +219,15 @@ class CalcView extends JFrame implements ActionListener{
 
 	}else if(es.equals("continue")){//継続ボタンを押した場合
 	    calcmodel.reset();
-	    this.l1.setText(calcmodel.ans_q());
+	    this.qlabel.setText(calcmodel.get_quejp() + calcmodel.get_quenum());
+	    calcform.setText("");
+	    
 	    /*処理を一時停止させるための部分
 	      try{
 	      Thread.sleep(5000);
 	      }catch(InterruptedException ee){}
 	    */
-	    new CalcView();
+	    //new CalcView();
 	}
     }
     
