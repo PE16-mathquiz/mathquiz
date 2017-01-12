@@ -166,6 +166,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
     //private CalcButton calcbutton=new CalcButton();
     private String quejp,quenum;//問題文と出題内容の変数
     private JLabel qlabel;//問題文を表示するためのラベル変数
+    private JLabel clabel;//正誤判定を表示するためのラベル変数
     private JButton cont,fin;//継続終了を選択するためのボタン変数
 
     //コンストラクタ
@@ -174,6 +175,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	quenum=calcmodel.get_quenum();
 	JPanel p1=new JPanel(),p2=new JPanel(),p3=new JPanel();
 	qlabel=new JLabel(quejp+quenum);
+	clabel=new JLabel("答えを入力したらEnterを押して下さい。");
 	this.setTitle("Calcuration Quiz");
 	this.setLayout(new GridLayout(3,1));
 	this.add(p1);
@@ -187,7 +189,8 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	//中段:問題回答フォーム
 	p2.add(calcform);
 	//下段:継続選択ボタン→なぜか中段にまとまってしまった。
-	p3.setLayout(new GridLayout(1,2));
+	p3.add(clabel);
+
 	fin=new JButton("終了");
 	cont=new JButton("続ける");
 	p2.add(fin);
@@ -203,7 +206,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
     }
 
     public void update(Observable o,Object arg){
-	this.qlabel.setText(calcmodel.ans_q());
+	this.clabel.setText(calcmodel.ans_q());
     }
 
   //継続or終了ActionListener
@@ -220,6 +223,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	}else if(es.equals("continue")){//継続ボタンを押した場合
 	    calcmodel.reset();
 	    this.qlabel.setText(calcmodel.get_quejp() + calcmodel.get_quenum());
+	    clabel.setText("答えを入力したらEnterを押して下さい。");
 	    calcform.setText("");
 	    
 	    /*処理を一時停止させるための部分
