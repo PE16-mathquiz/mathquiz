@@ -5,6 +5,8 @@ import java.util.*;
 import java.util.Random;
 
 class CalcModel extends Observable{
+    private boolean IsTitle; //タイトル画面かどうか判定
+
     private String value; //フォームに入力された値の保存先かつ答え
 
     //ここから先、コピーしたものになります。
@@ -246,6 +248,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
 
     //コンストラクタ
     public CalcView(){
+
 	quejp=calcmodel.get_quejp();
 	quenum=calcmodel.get_quenum();
 	JPanel p1=new JPanel(),p2=new JPanel(),p3=new JPanel();
@@ -295,7 +298,8 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	if(es.equals("finish")){//終了ボタンを押した場合
 	    //this.qlabel.setText(calcmodel.ans_q());
 
-	    //終了を押したときにシステムをすべて落とすためのコード→終了もスペースキーで回答を確定していなければできない模様。
+	    //終了を押したときにシステムをすべて落とすためのコード
+	        //→終了もスペースキーで回答を確定していなければできない模様。
 	    Component c = (Component)e.getSource();
 	    Window w = SwingUtilities.getWindowAncestor(c);
 	    w.dispose();
