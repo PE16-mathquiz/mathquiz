@@ -243,13 +243,14 @@ class CalcView extends JFrame implements Observer,ActionListener{
     private String quejp,quenum;//問題文と出題内容の変数
     private JLabel qlabel, nlabel;//問題文, 変換する数を表示するためのラベル変数
     private JLabel clabel;//正誤判定を表示するためのラベル変数
-    private JButton cont,fin;//継続終了を選択するためのボタン変数
+    private JButton cont,fin,stat;//継続終了を選択するためのボタン変数
+    private JPanel p2 = new JPanel();
 
     //コンストラクタ
     public CalcView(){
 	quejp=calcmodel.get_quejp();
 	quenum=calcmodel.get_quenum();
-	JPanel p1=new JPanel(),p2=new JPanel(),p3=new JPanel();
+	JPanel p1=new JPanel(), p3=new JPanel();
 	qlabel=new JLabel(quejp);
 	nlabel = new JLabel(quenum);
 	this.setTitle("Calcuration Quiz");
@@ -271,14 +272,18 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	//下段:継続選択ボタン→なぜか中段にまとまってしまった。
 	p3.add(clabel);
 	fin=new JButton("終了");
-	cont=new JButton();
-	cont.setText("開始");
-	p2.add(fin);
+	stat=new JButton("開始");
+	cont=new JButton("続ける");
 	p2.add(cont);
-	fin.setActionCommand("finish");
 	cont.setActionCommand("continue");
+	cont.setVisible(false);
+	p2.add(fin);
+	p2.add(stat);
+	fin.setActionCommand("finish");
+	stat.setActionCommand("stat");
 	fin.addActionListener(this);
 	cont.addActionListener(this);
+	stat.addActionListener(this);
 
 	this.pack();
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -322,9 +327,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	}
 	else{//開始ボタンを押した場合
 	    IsTitle = false;
-	    clabel.setText("答えを入力し、Enterで回答");
-	    System.out.println(IsTitle);
-	    cont.setText("続ける");
+	    cont.setVisible(true);
 	    // 引用元: https://goo.gl/mCnVKh
 	    questioninit();
 	}
