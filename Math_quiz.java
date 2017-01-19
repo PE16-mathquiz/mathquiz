@@ -243,6 +243,8 @@ class CalcForm extends JTextField implements ActionListener{
 //とりあえずの枠組み
 class CalcView extends JFrame implements Observer,ActionListener{
     private boolean IsTitle;
+    private int qcount=0;
+    private int ccount=0;
     //private CalcModel calcmodel=new CalcModel(10,16);
     private CalcModel calcmodel=new CalcModel();
     private CalcForm calcform = new CalcForm(calcmodel);
@@ -250,9 +252,12 @@ class CalcView extends JFrame implements Observer,ActionListener{
     private String quejp,quenum;//問題文と出題内容の変数
     private JLabel qlabel, nlabel;//問題文, 変換する数を表示するためのラベル変数
     private JLabel clabel;//正誤判定を表示するためのラベル変数
+    private JLabel colabel;
+    private int counterfrag = 0;
     private JButton cont,fin,stat;//継続終了を選択するためのボタン変数
     private JPanel p2 = new JPanel();
     private JPanel p1 = new JPanel();
+    private JPanel p4=new JPanel();
 
     //コンストラクタ
     public CalcView(){
@@ -261,11 +266,13 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	JPanel p3=new JPanel();
 	qlabel=new JLabel(quejp);
 	nlabel = new JLabel(quenum);
+	colabel=new JLabel(ccount+"/"+qcount);
 	this.setTitle("Calculation Quiz");
-	this.setLayout(new GridLayout(3,1));
+	this.setLayout(new GridLayout(4,1));
 	this.add(p1);
 	this.add(p2);
 	this.add(p3);
+	this.add(p4);
 	IsTitle = true;
 	calcmodel.addObserver(this);	
 	clabel=new JLabel("計算クイズ");
@@ -291,6 +298,9 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	fin.addActionListener(this);
 	cont.addActionListener(this);
 	stat.addActionListener(this);
+
+	p4.add(colabel);
+
 	this.pack();
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	this.setVisible(true);
@@ -302,6 +312,12 @@ class CalcView extends JFrame implements Observer,ActionListener{
     public void update(Observable o,Object arg){
 	this.clabel.setText(calcmodel.ans_q());
 	cont.setEnabled(true);
+
+	if(calcmodel.ans_q().equals("")){
+		counterfrag=1;
+	}else{
+		counterfrag=0;
+	}
     }
     public void questioninit(){
 	calcmodel.ran_base();
@@ -337,6 +353,12 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	}else if(es.equals("continue") && IsTitle == false){//継続ボタンを押した場合
 	    //calcmodel.reset();
 	    questioninit();
+	    qcount++;
+	    if(counterfrag==1){
+	    	ccount++;
+	    	counterfrag=0;
+	    }
+	    this.colabel.setText(ccount+"/"+qcount);
 	}
 	else{//開始ボタンを押した場合
 	    IsTitle = false;
