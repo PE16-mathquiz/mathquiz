@@ -254,7 +254,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	JPanel p3=new JPanel();
 	qlabel=new JLabel(quejp);
 	nlabel = new JLabel(quenum);
-	this.setTitle("Calcuration Quiz");
+	this.setTitle("Calculation Quiz");
 	this.setLayout(new GridLayout(3,1));
 	this.add(p1);
 	this.add(p2);
@@ -294,6 +294,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
 
     public void update(Observable o,Object arg){
 	this.clabel.setText(calcmodel.ans_q());
+	cont.setEnabled(true);
     }
     public void questioninit(){
 	calcmodel.ran_base();
@@ -303,6 +304,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	    clabel.setText("答えを入力したらEnterを押して下さい。");
 	}
 	calcform.setText("");
+	cont.setEnabled(false);
 	
 	/*処理を一時停止させるための部分
 	  try{
@@ -335,6 +337,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	    stat.setVisible(false);
 	    calcform.setVisible(true);
 	    // 引用元: https://goo.gl/mCnVKh
+	    cont.setEnabled(false);
 	    clabel.setText("答えを入力したらEnterを押して下さい。");
 	    p1.setVisible(true);
 	}
