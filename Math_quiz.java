@@ -24,9 +24,12 @@ class CalcModel extends Observable{
     private String quejp; //問題文
     private String quenum; //問題となる数
     private String answer; //答え
+    
+    //問題数
+    private int qcount=0;
 	
     //正解数
-    private int count=0;//簡単なスコアカウンター→０で初期化
+    private int ccount=0;//簡単なスコアカウンター→０で初期化
 
     //コンストラクタ(基数が既定の場合)
     public CalcModel(int q, int s){
@@ -53,6 +56,15 @@ class CalcModel extends Observable{
     }
     public String get_quenum(){
     	return quenum;
+    }
+   	public String get_answer(){
+   		return answer;
+   	}
+    public int get_ccount(){
+    	return ccount;
+    }
+    public int get_qcount(){
+    	return qcount;
     }
     
     //print関数
@@ -118,8 +130,10 @@ class CalcModel extends Observable{
 	    reply = reply.substring(1);
 	}
 	
-    	if(reply.equals(answer)){
-	    count++;
+	qcount++; //問題数増加
+	
+	if(reply.equals(answer)){
+	    ccount++; //正解数増加
 	    return correct;
 	}
 	else{
@@ -235,16 +249,15 @@ class CalcForm extends JTextField implements ActionListener{
 	}*/
 
     public void actionPerformed(ActionEvent e){
-	String s=this.getText();
-	calcmodel.setValue(s);
+		String s=this.getText();
+		calcmodel.setValue(s);
+		this.setEditable(false);
     }
 }
 
 //とりあえずの枠組み
 class CalcView extends JFrame implements Observer,ActionListener{
     private boolean IsTitle;
-    private int qcount=0;
-    private int ccount=0;
     //private CalcModel calcmodel=new CalcModel(10,16);
     private CalcModel calcmodel=new CalcModel();
     private CalcForm calcform = new CalcForm(calcmodel);
@@ -252,21 +265,30 @@ class CalcView extends JFrame implements Observer,ActionListener{
     private String quejp,quenum;//問題文と出題内容の変数
     private JLabel qlabel, nlabel;//問題文, 変換する数を表示するためのラベル変数
     private JLabel clabel;//正誤判定を表示するためのラベル変数
-    private JLabel colabel;
-    private int counterfrag = 0;
+    private JLabel alabel; //正解を表示するラベル
+    private JLabel colabel; //正答率を表示するためのラベル
     private JButton cont,fin,stat;//継続終了を選択するためのボタン変数
-    private JPanel p2 = new JPanel();
     private JPanel p1 = new JPanel();
+    private JPanel p2 = new JPanel();
+    private JPanel p3=new JPanel();
     private JPanel p4=new JPanel();
 
     //コンストラクタ
     public CalcView(){
 	quejp=calcmodel.get_quejp();
 	quenum=calcmodel.get_quenum();
-	JPanel p3=new JPanel();
+	
 	qlabel=new JLabel(quejp);
 	nlabel = new JLabel(quenum);
-	colabel=new JLabel(ccount+"/"+qcount);
+	clabel=new JLabel("計算クイズ");
+	alabel=new JLabel();
+	colabel=new JLabel();
+	qlabel.setFont(new Font(Font.SANS_SERIF,Font.BOLD,18));
+	nlabel.setFont(new Font(Font.SANS_SERIF,Font.BOLD,18));
+	clabel.setFont(new Font(Font.MONOSPACED,Font.BOLD,25));
+	alabel.setFont(new Font(Font.DIALOG, Font.PLAIN, 20));
+	colabel.setFont(new Font(Font.DIALOG, Font.PLAIN, 17));
+	
 	this.setTitle("Calculation Quiz");
 	this.setLayout(new GridLayout(4,1));
 	this.add(p1);
@@ -275,20 +297,28 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	this.add(p4);
 	IsTitle = true;
 	calcmodel.addObserver(this);	
-	clabel=new JLabel("計算クイズ");
-	//上段:問題文
+	//1段目:問題文
 	p1.setLayout(new GridLayout(2, 1));
 	qlabel.setHorizontalAlignment(JLabel.CENTER);
 	nlabel.setHorizontalAlignment(JLabel.CENTER);
 	p1.add(qlabel);
 	p1.add(nlabel);
-	//中段:問題回答フォーム
+	//2段目:問題回答フォーム
 	p2.add(calcform);
-	//下段:継続選択ボタン→なぜか中段にまとまってしまった。
+	//3段目:説明文、正答率の表示
+	p3.setLayout(new GridLayout(2, 1));
+	clabel.setHorizontalAlignment(JLabel.CENTER);
+	alabel.setHorizontalAlignment(JLabel.CENTER);
 	p3.add(clabel);
+	p3.add(alabel);
+	//4段目: 正答率の表示
+	colabel.setHorizontalAlignment(JLabel.CENTER);
+	p4.add(colabel);
+	//2段目: 選択ボタンの設置
 	fin=new JButton("終了");
 	stat=new JButton("開始");
 	cont=new JButton("続ける");
+	
 	p2.add(cont);
 	cont.setActionCommand("continue");
 	p2.add(fin);
@@ -298,9 +328,6 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	fin.addActionListener(this);
 	cont.addActionListener(this);
 	stat.addActionListener(this);
-
-	p4.add(colabel);
-
 	this.pack();
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	this.setVisible(true);
@@ -310,21 +337,21 @@ class CalcView extends JFrame implements Observer,ActionListener{
     }
 
     public void update(Observable o,Object arg){
-	this.clabel.setText(calcmodel.ans_q());
-	cont.setEnabled(true);
-
-	if(calcmodel.ans_q().equals("")){
-		counterfrag=1;
-	}else{
-		counterfrag=0;
-	}
+		this.clabel.setText(calcmodel.ans_q());
+		alabel.setText("正解は" + calcmodel.get_answer());
+		cont.setEnabled(true);
     }
     public void questioninit(){
 	calcmodel.ran_base();
 	if(IsTitle == false){
+		String car = String.format("%.2f", (float)calcmodel.get_ccount() / (float)calcmodel.get_qcount() * 100);
 	    this.qlabel.setText(calcmodel.get_quejp());
 	    this.nlabel.setText(calcmodel.get_quenum());
 	    clabel.setText("答えを入力したらEnterを押して下さい。");
+	    alabel.setText("");
+	    colabel.setText("正答率: " + calcmodel.get_ccount() + "/" + calcmodel.get_qcount() + "=" + car + "%" );
+	    
+	    calcform.setEditable(true);
 	}
 	calcform.setText("");
 	cont.setEnabled(false);
@@ -353,12 +380,6 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	}else if(es.equals("continue") && IsTitle == false){//継続ボタンを押した場合
 	    //calcmodel.reset();
 	    questioninit();
-	    qcount++;
-	    if(counterfrag==1){
-	    	ccount++;
-	    	counterfrag=0;
-	    }
-	    this.colabel.setText(ccount+"/"+qcount);
 	}
 	else{//開始ボタンを押した場合
 	    IsTitle = false;
@@ -368,6 +389,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	    // 引用元: https://goo.gl/mCnVKh
 	    cont.setEnabled(false);
 	    clabel.setText("答えを入力したらEnterを押して下さい。");
+	    clabel.setFont(new Font(Font.SANS_SERIF,Font.BOLD,17));
 	    p1.setVisible(true);
 	}
     }
