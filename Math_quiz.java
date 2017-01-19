@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -29,12 +28,17 @@ class CalcModel extends Observable{
     //正解数
     private int count=0;//簡単なスコアカウンター→０で初期化
 
-    //コンストラクタ
+    //コンストラクタ(基数が既定の場合)
     public CalcModel(int q, int s){
     	this.que = q;
-	this.sol = s;
+		this.sol = s;
 	    
-	this.reset();
+		this.reset();
+    }
+    
+    //コンストラクタ(基数が未定の場合)
+    public CalcModel(){
+    	this.ran_base();
     }
     
     //set関数
@@ -116,6 +120,76 @@ class CalcModel extends Observable{
 	}
     }
     
+    //基数をランダムで代入する関数
+    public void ran_base(){
+    	int qbase = -1, sbase = -1;
+    	int qran = (int)(Math.random() * 4); //0 ~ 3までの乱数
+    	int sran = (int)(Math.random() * 3); //0 ~ 2までの乱数
+    	
+    	switch(qran){
+    		case 0:
+    			qbase = 2; //問題の基数: 2進数
+    			switch(sran){
+    				case 0: 
+    					sbase = 8; //答えの基数: 8進数
+    					break;
+    				case 1:
+    					sbase = 10; //答えの基数: 10進数
+    					break;
+    				case 2:
+    					sbase = 16; //答えの基数: 16進数
+    					break;
+    			}
+    			break;
+    		case 1:
+    			qbase = 8; //問題の基数: 8進数
+    			switch(sran){
+    				case 0: 
+    					sbase = 2; //答えの基数: 2進数
+    					break;
+    				case 1:
+    					sbase = 10; //答えの基数: 10進数
+    					break;
+    				case 2:
+    					sbase = 16; //答えの基数: 16進数
+    					break;
+    			}
+    			break;
+    		case 2:
+    			qbase = 10; //問題の基数: 10進数
+    			switch(sran){
+    				case 0: 
+    					sbase = 2; //答えの基数: 2進数
+    					break;
+    				case 1:
+    					sbase = 8; //答えの基数: 8進数
+    					break;
+    				case 2:
+    					sbase = 16; //答えの基数: 16進数
+    					break;
+    			}
+    			break;
+    		case 3:
+    			qbase = 16; //問題の基数: 16進数
+    			switch(sran){
+    				case 0: 
+    					sbase = 2; //答えの基数: 2進数
+    					break;
+    				case 1:
+    					sbase = 8; //答えの基数: 8進数
+    					break;
+    				case 2:
+    					sbase = 10; //答えの基数: 10進数
+    					break;
+    			}
+    			break;
+    	}
+    	
+    	this.set_base(qbase, sbase);
+    	this.reset();
+    	
+    	return;
+    }
     
     //ここまで
     
@@ -126,7 +200,7 @@ class CalcModel extends Observable{
     
     public void setValue(String s){
 	value=s; //String出処理をするため直す必要なし。
-	System.out.println(value); //valueに値が入っているかの確認。ターミナル上に表示。
+	//System.out.println(value); //valueに値が入っているかの確認。ターミナル上に表示。
 
 	setChanged();
 	notifyObservers();
@@ -161,11 +235,12 @@ class CalcForm extends JTextField implements ActionListener{
 
 //とりあえずの枠組み
 class CalcView extends JFrame implements Observer,ActionListener{
-    private CalcModel calcmodel=new CalcModel(10,16);
+    //private CalcModel calcmodel=new CalcModel(10,16);
+    private CalcModel calcmodel=new CalcModel();
     private CalcForm calcform = new CalcForm(calcmodel);
     //private CalcButton calcbutton=new CalcButton();
     private String quejp,quenum;//問題文と出題内容の変数
-    private JLabel qlabel;//問題文を表示するためのラベル変数
+    private JLabel qlabel, nlabel;//問題文, 変換する数を表示するためのラベル変数
     private JLabel clabel;//正誤判定を表示するためのラベル変数
     private JButton cont,fin;//継続終了を選択するためのボタン変数
 
@@ -174,7 +249,8 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	quejp=calcmodel.get_quejp();
 	quenum=calcmodel.get_quenum();
 	JPanel p1=new JPanel(),p2=new JPanel(),p3=new JPanel();
-	qlabel=new JLabel(quejp+quenum);
+	qlabel=new JLabel(quejp);
+	nlabel = new JLabel(quenum);
 	clabel=new JLabel("答えを入力したらEnterを押して下さい。");
 	this.setTitle("Calcuration Quiz");
 	this.setLayout(new GridLayout(3,1));
@@ -185,7 +261,11 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	calcmodel.addObserver(this);
 
 	//上段:問題文
+	p1.setLayout(new GridLayout(2, 1));
+	qlabel.setHorizontalAlignment(JLabel.CENTER);
+	nlabel.setHorizontalAlignment(JLabel.CENTER);
 	p1.add(qlabel);
+	p1.add(nlabel);
 	//中段:問題回答フォーム
 	p2.add(calcform);
 	//下段:継続選択ボタン→なぜか中段にまとまってしまった。
@@ -221,8 +301,10 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	    w.dispose();
 
 	}else if(es.equals("continue")){//継続ボタンを押した場合
-	    calcmodel.reset();
-	    this.qlabel.setText(calcmodel.get_quejp() + calcmodel.get_quenum());
+	    //calcmodel.reset();
+	    calcmodel.ran_base();
+	    this.qlabel.setText(calcmodel.get_quejp());
+	    this.nlabel.setText(calcmodel.get_quenum());
 	    clabel.setText("答えを入力したらEnterを押して下さい。");
 	    calcform.setText("");
 	    
