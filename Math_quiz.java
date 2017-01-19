@@ -110,6 +110,13 @@ class CalcModel extends Observable{
     	String reply = value.toUpperCase();  //入力された16進数が小文字でも正解と判定するため
 	String correct="正解！！";//ActionListener煮かえすための文字列
 	String Ncorrect="不正解..";//同上
+
+	if(sol == 16 && reply.startsWith("0X")){
+	    reply = reply.substring(2);
+	}
+	else if(sol == 8 && reply.startsWith("0")){
+	    reply = reply.substring(1);
+	}
 	
     	if(reply.equals(answer)){
 	    count++;
