@@ -276,7 +276,6 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	cont=new JButton("続ける");
 	p2.add(cont);
 	cont.setActionCommand("continue");
-	cont.setVisible(false);
 	p2.add(fin);
 	p2.add(stat);
 	fin.setActionCommand("finish");
@@ -284,10 +283,10 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	fin.addActionListener(this);
 	cont.addActionListener(this);
 	stat.addActionListener(this);
-
 	this.pack();
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	this.setVisible(true);
+	cont.setVisible(false);
     }
 
     public void update(Observable o,Object arg){
@@ -328,6 +327,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	else{//開始ボタンを押した場合
 	    IsTitle = false;
 	    cont.setVisible(true);
+	    stat.setVisible(false);
 	    // 引用元: https://goo.gl/mCnVKh
 	    questioninit();
 	}
