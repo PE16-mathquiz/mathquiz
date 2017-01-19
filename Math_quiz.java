@@ -247,21 +247,19 @@ class CalcView extends JFrame implements Observer,ActionListener{
 
     //コンストラクタ
     public CalcView(){
-
 	quejp=calcmodel.get_quejp();
 	quenum=calcmodel.get_quenum();
 	JPanel p1=new JPanel(),p2=new JPanel(),p3=new JPanel();
 	qlabel=new JLabel(quejp);
 	nlabel = new JLabel(quenum);
-	clabel=new JLabel("答えを入力したらEnterを押して下さい。");
 	this.setTitle("Calcuration Quiz");
 	this.setLayout(new GridLayout(3,1));
 	this.add(p1);
 	this.add(p2);
 	this.add(p3);
-
-	calcmodel.addObserver(this);
-
+	IsTitle = true;
+	calcmodel.addObserver(this);	
+	clabel=new JLabel("計算クイズ");
 	//上段:問題文
 	p1.setLayout(new GridLayout(2, 1));
 	qlabel.setHorizontalAlignment(JLabel.CENTER);
@@ -272,9 +270,9 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	p2.add(calcform);
 	//下段:継続選択ボタン→なぜか中段にまとまってしまった。
 	p3.add(clabel);
-
 	fin=new JButton("終了");
-	cont=new JButton("続ける");
+	cont=new JButton();
+	cont.setText("開始");
 	p2.add(fin);
 	p2.add(cont);
 	fin.setActionCommand("finish");
@@ -290,6 +288,21 @@ class CalcView extends JFrame implements Observer,ActionListener{
     public void update(Observable o,Object arg){
 	this.clabel.setText(calcmodel.ans_q());
     }
+    public void questioninit(){
+	calcmodel.ran_base();
+	this.qlabel.setText(calcmodel.get_quejp());
+	this.nlabel.setText(calcmodel.get_quenum());
+	clabel.setText("答えを入力したらEnterを押して下さい。");
+	calcform.setText("");
+	
+	/*処理を一時停止させるための部分
+	  try{
+	  Thread.sleep(5000);
+	  }catch(InterruptedException ee){}
+	*/
+	//new CalcView();	
+}
+
 
   //継続or終了ActionListener
     public void actionPerformed(ActionEvent e){
@@ -303,20 +316,17 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	    Window w = SwingUtilities.getWindowAncestor(c);
 	    w.dispose();
 
-	}else if(es.equals("continue")){//継続ボタンを押した場合
+	}else if(es.equals("continue") && IsTitle == false){//継続ボタンを押した場合
 	    //calcmodel.reset();
-	    calcmodel.ran_base();
-	    this.qlabel.setText(calcmodel.get_quejp());
-	    this.nlabel.setText(calcmodel.get_quenum());
-	    clabel.setText("答えを入力したらEnterを押して下さい。");
-	    calcform.setText("");
-	    
-	    /*処理を一時停止させるための部分
-	      try{
-	      Thread.sleep(5000);
-	      }catch(InterruptedException ee){}
-	    */
-	    //new CalcView();
+	    questioninit();
+	}
+	else{//開始ボタンを押した場合
+	    IsTitle = false;
+	    clabel.setText("答えを入力し、Enterで回答");
+	    System.out.println(IsTitle);
+	    cont.setText("続ける");
+	    // 引用元: https://goo.gl/mCnVKh
+	    questioninit();
 	}
     }
     
