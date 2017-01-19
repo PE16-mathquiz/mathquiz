@@ -235,6 +235,7 @@ class CalcForm extends JTextField implements ActionListener{
 
 //とりあえずの枠組み
 class CalcView extends JFrame implements Observer,ActionListener{
+    private boolean IsTitle;
     //private CalcModel calcmodel=new CalcModel(10,16);
     private CalcModel calcmodel=new CalcModel();
     private CalcForm calcform = new CalcForm(calcmodel);
@@ -242,24 +243,25 @@ class CalcView extends JFrame implements Observer,ActionListener{
     private String quejp,quenum;//問題文と出題内容の変数
     private JLabel qlabel, nlabel;//問題文, 変換する数を表示するためのラベル変数
     private JLabel clabel;//正誤判定を表示するためのラベル変数
-    private JButton cont,fin;//継続終了を選択するためのボタン変数
+    private JButton cont,fin,stat;//継続終了を選択するためのボタン変数
+    private JPanel p2 = new JPanel();
+    private JPanel p1 = new JPanel();
 
     //コンストラクタ
     public CalcView(){
 	quejp=calcmodel.get_quejp();
 	quenum=calcmodel.get_quenum();
-	JPanel p1=new JPanel(),p2=new JPanel(),p3=new JPanel();
+	JPanel p3=new JPanel();
 	qlabel=new JLabel(quejp);
 	nlabel = new JLabel(quenum);
-	clabel=new JLabel("答えを入力したらEnterを押して下さい。");
 	this.setTitle("Calcuration Quiz");
 	this.setLayout(new GridLayout(3,1));
 	this.add(p1);
 	this.add(p2);
 	this.add(p3);
-
-	calcmodel.addObserver(this);
-
+	IsTitle = true;
+	calcmodel.addObserver(this);	
+	clabel=new JLabel("計算クイズ");
 	//上段:問題文
 	p1.setLayout(new GridLayout(2, 1));
 	qlabel.setHorizontalAlignment(JLabel.CENTER);
@@ -270,24 +272,46 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	p2.add(calcform);
 	//下段:継続選択ボタン→なぜか中段にまとまってしまった。
 	p3.add(clabel);
-
 	fin=new JButton("終了");
+	stat=new JButton("開始");
 	cont=new JButton("続ける");
-	p2.add(fin);
 	p2.add(cont);
-	fin.setActionCommand("finish");
 	cont.setActionCommand("continue");
+	p2.add(fin);
+	p2.add(stat);
+	fin.setActionCommand("finish");
+	stat.setActionCommand("stat");
 	fin.addActionListener(this);
 	cont.addActionListener(this);
-
+	stat.addActionListener(this);
 	this.pack();
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	this.setVisible(true);
+	cont.setVisible(false);
+	p1.setVisible(false);
+	calcform.setVisible(false);
     }
 
     public void update(Observable o,Object arg){
 	this.clabel.setText(calcmodel.ans_q());
     }
+    public void questioninit(){
+	calcmodel.ran_base();
+	if(IsTitle == false){
+	    this.qlabel.setText(calcmodel.get_quejp());
+	    this.nlabel.setText(calcmodel.get_quenum());
+	    clabel.setText("答えを入力したらEnterを押して下さい。");
+	}
+	calcform.setText("");
+	
+	/*処理を一時停止させるための部分
+	  try{
+	  Thread.sleep(5000);
+	  }catch(InterruptedException ee){}
+	*/
+	//new CalcView();	
+}
+
 
   //継続or終了ActionListener
     public void actionPerformed(ActionEvent e){
@@ -295,25 +319,24 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	if(es.equals("finish")){//終了ボタンを押した場合
 	    //this.qlabel.setText(calcmodel.ans_q());
 
-	    //終了を押したときにシステムをすべて落とすためのコード→終了もスペースキーで回答を確定していなければできない模様。
+	    //終了を押したときにシステムをすべて落とすためのコード
+	        //→終了もスペースキーで回答を確定していなければできない模様。
 	    Component c = (Component)e.getSource();
 	    Window w = SwingUtilities.getWindowAncestor(c);
 	    w.dispose();
 
-	}else if(es.equals("continue")){//継続ボタンを押した場合
+	}else if(es.equals("continue") && IsTitle == false){//継続ボタンを押した場合
 	    //calcmodel.reset();
-	    calcmodel.ran_base();
-	    this.qlabel.setText(calcmodel.get_quejp());
-	    this.nlabel.setText(calcmodel.get_quenum());
+	    questioninit();
+	}
+	else{//開始ボタンを押した場合
+	    IsTitle = false;
+	    cont.setVisible(true);
+	    stat.setVisible(false);
+	    calcform.setVisible(true);
+	    // 引用元: https://goo.gl/mCnVKh
 	    clabel.setText("答えを入力したらEnterを押して下さい。");
-	    calcform.setText("");
-	    
-	    /*処理を一時停止させるための部分
-	      try{
-	      Thread.sleep(5000);
-	      }catch(InterruptedException ee){}
-	    */
-	    //new CalcView();
+	    p1.setVisible(true);
 	}
     }
     
