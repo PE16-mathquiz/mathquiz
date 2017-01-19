@@ -245,12 +245,13 @@ class CalcView extends JFrame implements Observer,ActionListener{
     private JLabel clabel;//正誤判定を表示するためのラベル変数
     private JButton cont,fin,stat;//継続終了を選択するためのボタン変数
     private JPanel p2 = new JPanel();
+    private JPanel p1 = new JPanel();
 
     //コンストラクタ
     public CalcView(){
 	quejp=calcmodel.get_quejp();
 	quenum=calcmodel.get_quenum();
-	JPanel p1=new JPanel(), p3=new JPanel();
+	JPanel p3=new JPanel();
 	qlabel=new JLabel(quejp);
 	nlabel = new JLabel(quenum);
 	this.setTitle("Calcuration Quiz");
@@ -287,6 +288,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	this.setVisible(true);
 	cont.setVisible(false);
+	p1.setVisible(false);
     }
 
     public void update(Observable o,Object arg){
@@ -294,9 +296,11 @@ class CalcView extends JFrame implements Observer,ActionListener{
     }
     public void questioninit(){
 	calcmodel.ran_base();
-	this.qlabel.setText(calcmodel.get_quejp());
-	this.nlabel.setText(calcmodel.get_quenum());
-	clabel.setText("答えを入力したらEnterを押して下さい。");
+	if(IsTitle == false){
+	    this.qlabel.setText(calcmodel.get_quejp());
+	    this.nlabel.setText(calcmodel.get_quenum());
+	    clabel.setText("答えを入力したらEnterを押して下さい。");
+	}
 	calcform.setText("");
 	
 	/*処理を一時停止させるための部分
@@ -329,7 +333,8 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	    cont.setVisible(true);
 	    stat.setVisible(false);
 	    // 引用元: https://goo.gl/mCnVKh
-	    questioninit();
+	    clabel.setText("答えを入力したらEnterを押して下さい。");
+	    p1.setVisible(true);
 	}
     }
     
