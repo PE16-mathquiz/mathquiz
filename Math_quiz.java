@@ -5,8 +5,6 @@ import java.util.*;
 import java.util.Random;
 
 class CalcModel extends Observable{
-    private boolean IsTitle; //タイトル画面かどうか判定
-
     private String value; //フォームに入力された値の保存先かつ答え
 
     //ここから先、コピーしたものになります。
@@ -237,6 +235,7 @@ class CalcForm extends JTextField implements ActionListener{
 
 //とりあえずの枠組み
 class CalcView extends JFrame implements Observer,ActionListener{
+    private boolean IsTitle;
     //private CalcModel calcmodel=new CalcModel(10,16);
     private CalcModel calcmodel=new CalcModel();
     private CalcForm calcform = new CalcForm(calcmodel);
