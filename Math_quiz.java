@@ -289,6 +289,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	this.setVisible(true);
 	cont.setVisible(false);
 	p1.setVisible(false);
+	calcform.setVisible(false);
     }
 
     public void update(Observable o,Object arg){
@@ -332,6 +333,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	    IsTitle = false;
 	    cont.setVisible(true);
 	    stat.setVisible(false);
+	    calcform.setVisible(true);
 	    // 引用元: https://goo.gl/mCnVKh
 	    clabel.setText("答えを入力したらEnterを押して下さい。");
 	    p1.setVisible(true);
