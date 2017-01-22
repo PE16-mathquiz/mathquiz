@@ -239,7 +239,7 @@ class CalcView extends JFrame implements Observer, ActionListener {
     private JLabel qlabel, nlabel;
     private JLabel clabel; // 正誤判定
     private JLabel alabel; // 正解表示
-    private JLabel colabel; // 正答率を表示するためのラベル
+    private JLabel colabel; // 正答率
     private JButton cont, fin, stat;
     private JPanel p1 = new JPanel(), p2 = new JPanel();
     private JPanel p3 = new JPanel(), p4 = new JPanel();
@@ -268,42 +268,43 @@ class CalcView extends JFrame implements Observer, ActionListener {
         this.add(p4);
         IsTitle = true;
         calcmodel.addObserver(this);
-        // 1段目:問題文
+
         p1.setLayout(new GridLayout(2, 1));
         qlabel.setHorizontalAlignment(JLabel.CENTER);
         nlabel.setHorizontalAlignment(JLabel.CENTER);
         p1.add(qlabel);
         p1.add(nlabel);
-        // 2段目:問題回答フォーム
+
         p2.add(calcform);
-        // 3段目:説明文、正答率の表示
+        fin  = new JButton("終了");
+        stat = new JButton("開始");
+        cont = new JButton("続ける");
+        fin.setActionCommand("finish");
+        stat.setActionCommand("stat");
+        cont.setActionCommand("continue");
+        fin.addActionListener(this);
+        cont.addActionListener(this);
+        stat.addActionListener(this);
+        p2.add(cont);
+        p2.add(fin);
+        p2.add(stat);
+
         p3.setLayout(new GridLayout(2, 1));
         clabel.setHorizontalAlignment(JLabel.CENTER);
         alabel.setHorizontalAlignment(JLabel.CENTER);
         p3.add(clabel);
         p3.add(alabel);
-        // 4段目: 正答率の表示
+
         colabel.setHorizontalAlignment(JLabel.CENTER);
         p4.add(colabel);
-        // 2段目: 選択ボタンの設置
-        fin  = new JButton("終了");
-        stat = new JButton("開始");
-        cont = new JButton("続ける");
 
-        p2.add(cont);
-        cont.setActionCommand("continue");
-        p2.add(fin);
-        p2.add(stat);
-        fin.setActionCommand("finish");
-        stat.setActionCommand("stat");
-        fin.addActionListener(this);
-        cont.addActionListener(this);
-        stat.addActionListener(this);
         this.pack();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
-        cont.setVisible(false);
+
+        // これらは開始時にtrueとなる
         p1.setVisible(false);
+        cont.setVisible(false);
         calcform.setVisible(false);
     }
 
