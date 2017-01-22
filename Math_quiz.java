@@ -1,4 +1,4 @@
-import javax.swing.*;
+﻿import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -72,8 +72,8 @@ class CalcModel extends Observable {
         nums[0] = bin; nums[1] = oct; nums[2] = dec; nums[3] = hex;
         int bases[] = new int[4];
         bases[0] = 2; bases[1] = 8; bases[2] = 10; bases[3] = 16;
-        quejp = String.format("次の%d進数を%d進数に変換しなさい", bases[que], bases[sol]);
-        quenum  = "none";
+        quejp    = String.format("次の%d進数を%d進数に変換しなさい", bases[que], bases[sol]);
+        quenum   = "none";
 
         switch (que) {
             case 0:
@@ -108,6 +108,7 @@ class CalcModel extends Observable {
         qcount++;
         if (reply.equals(answer)) {
             ccount++;
+
             return correct;
         }
         else {
@@ -162,7 +163,7 @@ class CalcForm extends JTextField implements ActionListener {
 class CalcView extends JFrame implements Observer, ActionListener {
     private boolean IsTitle;
     private CalcModel calcmodel = new CalcModel();
-    private CalcForm  calcform  = new CalcForm(calcmodel);
+    private CalcForm calcform = new CalcForm(calcmodel);
     private String quejp, quenum;
     private JLabel qlabel, nlabel;
     private JLabel clabel; // 正誤判定
