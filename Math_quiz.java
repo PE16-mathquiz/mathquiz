@@ -121,9 +121,9 @@ class CalcModel extends Observable {
 
     public String check_answer()
     {
-        String reply    = value.toUpperCase(); // 入力された16進数が小文字でも正解と判定するため
-        String correct  = "正解！！"; // ActionListener煮かえすための文字列
-        String Ncorrect = "不正解.."; //同上
+        String reply    = value.toUpperCase(); // 大文字小文字対応
+        String correct  = "正解！！";
+        String Ncorrect = "不正解.."; // ActionListenerへ返す
         if (sol == 16 && reply.startsWith("0X")) {
             reply = reply.substring(2);
         }
@@ -133,7 +133,6 @@ class CalcModel extends Observable {
         qcount++;
         if (reply.equals(answer)) {
             ccount++;
-
             return correct;
         }
         else {
