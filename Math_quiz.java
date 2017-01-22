@@ -37,7 +37,7 @@ class CalcModel extends Observable {
     // コンストラクタ(基数が未定の場合)
     public CalcModel()
     {
-        this.ran_base();
+        this.rand_base();
     }
 
     public void set_base(int q, int s)
@@ -141,7 +141,7 @@ class CalcModel extends Observable {
     }
 
     // 基数をランダムで代入する関数
-    public void ran_base()
+    public void rand_base()
     {
         int qbase = -1, sbase = -1;
         int qran = (int) (Math.random() * 4); // 0 ~ 3までの乱数
@@ -343,7 +343,7 @@ class CalcView extends JFrame implements Observer, ActionListener {
 
     public void questioninit()
     {
-        calcmodel.ran_base();
+        calcmodel.rand_base();
         if (IsTitle == false) {
             String car = String.format("%.2f", (float) calcmodel.get_ccount() / (float) calcmodel.get_qcount() * 100);
             this.qlabel.setText(calcmodel.get_quejp());
