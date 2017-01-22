@@ -161,7 +161,6 @@ class CalcForm extends JTextField implements ActionListener {
 
 
 class CalcView extends JFrame implements Observer, ActionListener {
-    private boolean IsTitle;
     private CalcModel calcmodel = new CalcModel();
     private CalcForm calcform = new CalcForm(calcmodel);
     private String quejp, quenum;
