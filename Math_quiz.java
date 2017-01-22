@@ -120,7 +120,7 @@ class CalcModel extends Observable {
     }
 
     // 答えを入力してもらって確認する
-    public String ans_q()
+    public String check_answer()
     {
         String reply    = value.toUpperCase(); // 入力された16進数が小文字でも正解と判定するため
         String correct  = "正解！！"; // ActionListener煮かえすための文字列
@@ -338,7 +338,7 @@ class CalcView extends JFrame implements Observer, ActionListener {
 
     public void update(Observable o, Object arg)
     {
-        this.clabel.setText(calcmodel.ans_q());
+        this.clabel.setText(calcmodel.check_answer());
         alabel.setText("正解は" + calcmodel.get_answer());
         cont.setEnabled(true);
     }
@@ -372,7 +372,7 @@ class CalcView extends JFrame implements Observer, ActionListener {
     {
         String es = e.getActionCommand();
         if (es.equals("finish")) { // 終了ボタンを押した場合
-            // this.qlabel.setText(calcmodel.ans_q());
+            // this.qlabel.setText(calcmodel.check_answer());
 
             // 終了を押したときにシステムをすべて落とすためのコード
             // →終了もスペースキーで回答を確定していなければできない模様。
