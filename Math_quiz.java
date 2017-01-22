@@ -5,52 +5,51 @@ import java.util.*;
 import java.util.Random;
 
 class CalcModel extends Observable{
-    private String value; //フォームに入力された値の保存先かつ答え
+    private String value;
 
     //ここから先、コピーしたものになります。
 
-    private int dec_int; //ランダムに決める問題の数(10進数)
-    private String dec; //10進数の問題の数
-    private String bin; //2進数の問題の数
-    private String oct; //8進数の問題の数
-    private String hex; //16進数の問題の数
+    private int dec_int;
+    private String dec;
+    private String bin;
+    private String oct;
+    private String hex;
 
     //問題の形式をきめるフラグ
     //2:２進数 8:8進数 10:10進数 16:16進数
-    private int que; //問題の基数
-    private int sol; //答えの基数
-    
+    private int que;
+    private int sol;
+
     //問題文を入れる変数
-    private String quejp; //問題文
-    private String quenum; //問題となる数
-    private String answer; //答え
-    
-    //問題数
+    private String quejp;
+    private String quenum;
+    private String answer;
+
+
     private int qcount=0;
-	
-    //正解数
-    private int ccount=0;//簡単なスコアカウンター→０で初期化
+
+
+    private int ccount=0;
 
     //コンストラクタ(基数が既定の場合)
     public CalcModel(int q, int s){
     	this.que = q;
 		this.sol = s;
-	    
+
 		this.reset();
     }
-    
+
     //コンストラクタ(基数が未定の場合)
     public CalcModel(){
     	this.ran_base();
     }
-    
-    //set関数
+
+
     public void set_base(int q, int s){
     	this.que = q;
     	this.sol = s;
     }
-    
-    //get関数
+
     public String get_quejp(){
     	return quejp;
     }
@@ -66,7 +65,7 @@ class CalcModel extends Observable{
     public int get_qcount(){
     	return qcount;
     }
-    
+
     //print関数
     public void print_all(){
 	System.out.println("10進数: " + dec);
@@ -74,7 +73,7 @@ class CalcModel extends Observable{
 	System.out.println(" 8進数: " + oct);
 	System.out.println("16進数: " + hex);
     }
-    
+
     //問題をリセットする関数(コンストラクタでも使用)
     public void reset(){
     	dec_int = (int)(Math.random() * Math.pow(2, 10));
@@ -83,7 +82,7 @@ class CalcModel extends Observable{
 	oct = Integer.toOctalString(dec_int);
 	hex = Integer.toHexString(dec_int).toUpperCase();
 	quejp = String.format("次の%d進数を%d進数に変換しなさい", que, sol);
-	    
+
 	quenum = "none";
 	switch(que){
 	case 2:
@@ -99,7 +98,7 @@ class CalcModel extends Observable{
 	    quenum = "0x" + hex;
 	    break;
 	}
-	
+
 	answer = "none";
 	switch(sol){
 	case 2:
@@ -116,7 +115,7 @@ class CalcModel extends Observable{
 	    break;
 	}
     }
-    
+
     //答えを入力してもらって確認する
     public String ans_q(){
     	String reply = value.toUpperCase();  //入力された16進数が小文字でも正解と判定するため
@@ -129,9 +128,9 @@ class CalcModel extends Observable{
 	else if(sol == 8 && reply.startsWith("0")){
 	    reply = reply.substring(1);
 	}
-	
+
 	qcount++; //問題数増加
-	
+
 	if(reply.equals(answer)){
 	    ccount++; //正解数増加
 	    return correct;
@@ -140,18 +139,18 @@ class CalcModel extends Observable{
 	    return Ncorrect;
 	}
     }
-    
+
     //基数をランダムで代入する関数
     public void ran_base(){
     	int qbase = -1, sbase = -1;
     	int qran = (int)(Math.random() * 4); //0 ~ 3までの乱数
     	int sran = (int)(Math.random() * 3); //0 ~ 2までの乱数
-    	
+
     	switch(qran){
     		case 0:
     			qbase = 2; //問題の基数: 2進数
     			switch(sran){
-    				case 0: 
+    				case 0:
     					sbase = 8; //答えの基数: 8進数
     					break;
     				case 1:
@@ -165,7 +164,7 @@ class CalcModel extends Observable{
     		case 1:
     			qbase = 8; //問題の基数: 8進数
     			switch(sran){
-    				case 0: 
+    				case 0:
     					sbase = 2; //答えの基数: 2進数
     					break;
     				case 1:
@@ -179,7 +178,7 @@ class CalcModel extends Observable{
     		case 2:
     			qbase = 10; //問題の基数: 10進数
     			switch(sran){
-    				case 0: 
+    				case 0:
     					sbase = 2; //答えの基数: 2進数
     					break;
     				case 1:
@@ -193,7 +192,7 @@ class CalcModel extends Observable{
     		case 3:
     			qbase = 16; //問題の基数: 16進数
     			switch(sran){
-    				case 0: 
+    				case 0:
     					sbase = 2; //答えの基数: 2進数
     					break;
     				case 1:
@@ -205,20 +204,20 @@ class CalcModel extends Observable{
     			}
     			break;
     	}
-    	
+
     	this.set_base(qbase, sbase);
     	this.reset();
-    	
+
     	return;
     }
-    
+
     //ここまで
-    
-    
+
+
     public String getValue(){
 	return value;
     }
-    
+
     public void setValue(String s){
 	value=s; //String出処理をするため直す必要なし。
 	//System.out.println(value); //valueに値が入っているかの確認。ターミナル上に表示。
@@ -277,7 +276,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
     public CalcView(){
 	quejp=calcmodel.get_quejp();
 	quenum=calcmodel.get_quenum();
-	
+
 	qlabel=new JLabel(quejp);
 	nlabel = new JLabel(quenum);
 	clabel=new JLabel("計算クイズ");
@@ -288,7 +287,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	clabel.setFont(new Font(Font.MONOSPACED,Font.BOLD,25));
 	alabel.setFont(new Font(Font.DIALOG, Font.PLAIN, 20));
 	colabel.setFont(new Font(Font.DIALOG, Font.PLAIN, 17));
-	
+
 	this.setTitle("Calculation Quiz");
 	this.setLayout(new GridLayout(4,1));
 	this.add(p1);
@@ -296,7 +295,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	this.add(p3);
 	this.add(p4);
 	IsTitle = true;
-	calcmodel.addObserver(this);	
+	calcmodel.addObserver(this);
 	//1段目:問題文
 	p1.setLayout(new GridLayout(2, 1));
 	qlabel.setHorizontalAlignment(JLabel.CENTER);
@@ -318,7 +317,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	fin=new JButton("終了");
 	stat=new JButton("開始");
 	cont=new JButton("続ける");
-	
+
 	p2.add(cont);
 	cont.setActionCommand("continue");
 	p2.add(fin);
@@ -350,18 +349,18 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	    clabel.setText("答えを入力したらEnterを押して下さい。");
 	    alabel.setText("");
 	    colabel.setText("正答率: " + calcmodel.get_ccount() + "/" + calcmodel.get_qcount() + "=" + car + "%" );
-	    
+
 	    calcform.setEditable(true);
 	}
 	calcform.setText("");
 	cont.setEnabled(false);
-	
+
 	/*処理を一時停止させるための部分
 	  try{
 	  Thread.sleep(5000);
 	  }catch(InterruptedException ee){}
 	*/
-	//new CalcView();	
+	//new CalcView();
 }
 
 
@@ -393,7 +392,7 @@ class CalcView extends JFrame implements Observer,ActionListener{
 	    p1.setVisible(true);
 	}
     }
-    
+
     public static void main (String args[]){
 	new CalcView();
     }
