@@ -15,7 +15,7 @@ class CalcModel extends Observable {
 
     private int qcount = 0, ccount = 0;
 
-    // コンストラクタ(基数が既定の場合)
+    // 基数既定時
     public CalcModel(int q, int s)
     {
         this.que = q;
@@ -23,7 +23,7 @@ class CalcModel extends Observable {
         this.reset();
     }
 
-    // コンストラクタ(基数が未定の場合)
+    // 基数未定時
     public CalcModel()
     {
         this.rand_base();
@@ -234,19 +234,16 @@ class CalcForm extends JTextField implements ActionListener {
 class CalcView extends JFrame implements Observer, ActionListener {
     private boolean IsTitle;
     private CalcModel calcmodel = new CalcModel();
-    private CalcForm calcform   = new CalcForm(calcmodel);
+    private CalcForm  calcform  = new CalcForm(calcmodel);
     private String quejp, quenum;
     private JLabel qlabel, nlabel;
     private JLabel clabel; // 正誤判定
     private JLabel alabel; // 正解表示
     private JLabel colabel; // 正答率を表示するためのラベル
     private JButton cont, fin, stat;
-    private JPanel p1 = new JPanel();
-    private JPanel p2 = new JPanel();
-    private JPanel p3 = new JPanel();
-    private JPanel p4 = new JPanel();
+    private JPanel p1 = new JPanel(), p2 = new JPanel();
+    private JPanel p3 = new JPanel(), p4 = new JPanel();
 
-    // コンストラクタ
     public CalcView()
     {
         quejp  = calcmodel.get_quejp();
