@@ -129,10 +129,10 @@ class CalcModel extends Observable{
 	    reply = reply.substring(1);
 	}
 
-	qcount++; //問題数増加
+	qcount++;
 
 	if(reply.equals(answer)){
-	    ccount++; //正解数増加
+	    ccount++;
 	    return correct;
 	}
 	else{
