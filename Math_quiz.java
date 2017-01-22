@@ -334,6 +334,7 @@ class CalcView extends JFrame implements Observer, ActionListener {
         } else if (es.equals("continue")) {
             questioninit();
         } else {
+            // Start Sequence
             p1.setVisible(true);
             cont.setVisible(true);
             calcform.setVisible(true);
