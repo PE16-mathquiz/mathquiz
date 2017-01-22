@@ -200,8 +200,7 @@ class CalcModel extends Observable {
 
     public void setValue(String s)
     {
-        value = s; // String出処理をするため直す必要なし。
-        // System.out.println(value); //valueに値が入っているかの確認。ターミナル上に表示。
+        value = s;
         setChanged();
         notifyObservers();
     }
