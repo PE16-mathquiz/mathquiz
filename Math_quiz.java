@@ -341,24 +341,19 @@ class CalcView extends JFrame implements Observer, ActionListener {
     public void actionPerformed(ActionEvent e)
     {
         String es = e.getActionCommand();
-        if (es.equals("finish")) { // 終了ボタンを押した場合
-            // this.qlabel.setText(calcmodel.check_answer());
-
-            // 終了を押したときにシステムをすべて落とすためのコード
-            // →終了もスペースキーで回答を確定していなければできない模様。
+        if (es.equals("finish")) {
+            // Shutdown Sequence
             Component c = (Component) e.getSource();
             Window    w = SwingUtilities.getWindowAncestor(c);
             w.dispose();
-        } else if (es.equals("continue") && IsTitle == false) { // 継続ボタンを押した場合
-            // calcmodel.reset();
+        } else if (es.equals("continue") && IsTitle == false) {
             questioninit();
         }
-        else { // 開始ボタンを押した場合
+        else {
             IsTitle = false;
             cont.setVisible(true);
             stat.setVisible(false);
             calcform.setVisible(true);
-            // 引用元: https://goo.gl/mCnVKh
             cont.setEnabled(false);
             clabel.setText("答えを入力したらEnterを押して下さい。");
             clabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 17));
