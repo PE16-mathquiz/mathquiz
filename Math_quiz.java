@@ -6,25 +6,16 @@ import java.util.Random;
 
 class CalcModel extends Observable {
     private String value;
-    // ここから先、コピーしたものになります。
-
     private int dec_int;
-    private String dec;
-    private String bin;
-    private String oct;
-    private String hex;
+    private String dec, bin, oct, hex;
 
     // 問題の形式をきめるフラグ
-    private int que;
-    private int sol;
+    private int que, sol;
 
     // 問題文を入れる変数
-    private String quejp;
-    private String quenum;
-    private String answer;
+    private String quejp, quenum, answer;
 
-    private int qcount = 0;
-    private int ccount = 0;
+    private int qcount = 0, ccount = 0;
 
     // コンストラクタ(基数が既定の場合)
     public CalcModel(int q, int s)
@@ -69,14 +60,6 @@ class CalcModel extends Observable {
     public int get_qcount()
     {
         return qcount;
-    }
-
-    public void print_all()
-    {
-        System.out.println("10進数: " + dec);
-        System.out.println(" 2進数: " + bin);
-        System.out.println(" 8進数: " + oct);
-        System.out.println("16進数: " + hex);
     }
 
     public void reset()
