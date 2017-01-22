@@ -233,16 +233,14 @@ class CalcForm extends JTextField implements ActionListener {
 
 class CalcView extends JFrame implements Observer, ActionListener {
     private boolean IsTitle;
-    // private CalcModel calcmodel=new CalcModel(10,16);
     private CalcModel calcmodel = new CalcModel();
     private CalcForm calcform   = new CalcForm(calcmodel);
-    // private CalcButton calcbutton=new CalcButton();
-    private String quejp, quenum; // 問題文と出題内容の変数
-    private JLabel qlabel, nlabel; // 問題文, 変換する数を表示するためのラベル変数
-    private JLabel clabel; // 正誤判定を表示するためのラベル変数
-    private JLabel alabel; // 正解を表示するラベル
+    private String quejp, quenum;
+    private JLabel qlabel, nlabel;
+    private JLabel clabel; // 正誤判定
+    private JLabel alabel; // 正解表示
     private JLabel colabel; // 正答率を表示するためのラベル
-    private JButton cont, fin, stat; // 継続終了を選択するためのボタン変数
+    private JButton cont, fin, stat;
     private JPanel p1 = new JPanel();
     private JPanel p2 = new JPanel();
     private JPanel p3 = new JPanel();
