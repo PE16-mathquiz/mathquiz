@@ -142,7 +142,6 @@ class CalcModel extends Observable {
     }
 
 
-    // 基数をランダムで代入する関数
     public void rand_base()
     {
         int qbase = -1, sbase = -1;
@@ -150,7 +149,6 @@ class CalcModel extends Observable {
         int sran = (int) (Math.random() * 3) + 1; // 被り防止のため1足して1 ~ 3
         int bases[] = new int[4]; // 基数を収容する配列
         bases[0] = 2; bases[1] = 8; bases[2] = 10; bases[3] = 16;
-
         qbase = bases[qran];
         sbase = bases[(sran + qran) % 4];
         this.set_base(qbase, sbase);
