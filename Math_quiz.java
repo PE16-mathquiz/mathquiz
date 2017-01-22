@@ -230,7 +230,7 @@ class CalcForm extends JTextField implements ActionListener {
     }
 }
 
-// とりあえずの枠組み
+
 class CalcView extends JFrame implements Observer, ActionListener {
     private boolean IsTitle;
     // private CalcModel calcmodel=new CalcModel(10,16);
