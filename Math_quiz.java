@@ -225,8 +225,6 @@ class CalcModel extends Observable {
 }
 
 
-
-// 入力フォームの前身
 class CalcForm extends JTextField implements ActionListener {
     private CalcModel calcmodel;
 
