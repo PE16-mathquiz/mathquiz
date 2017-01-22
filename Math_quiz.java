@@ -340,18 +340,16 @@ class CalcView extends JFrame implements Observer, ActionListener {
             Component c = (Component) e.getSource();
             Window    w = SwingUtilities.getWindowAncestor(c);
             w.dispose();
-        } else if (es.equals("continue") && IsTitle == false) {
+        } else if (es.equals("continue")) {
             questioninit();
-        }
-        else {
-            IsTitle = false;
+        } else {
+            p1.setVisible(true);
             cont.setVisible(true);
-            stat.setVisible(false);
             calcform.setVisible(true);
+            stat.setVisible(false);
             cont.setEnabled(false);
             clabel.setText("答えを入力したらEnterを押して下さい。");
             clabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 17));
-            p1.setVisible(true);
         }
     }
 
