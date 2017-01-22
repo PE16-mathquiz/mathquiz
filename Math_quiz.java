@@ -329,13 +329,6 @@ class CalcView extends JFrame implements Observer, ActionListener {
         }
         calcform.setText("");
         cont.setEnabled(false);
-
-        /*処理を一時停止させるための部分
-          try{
-          Thread.sleep(5000);
-          }catch(InterruptedException ee){}
-        */
-        // new CalcView();
     }
 
     public void actionPerformed(ActionEvent e)
