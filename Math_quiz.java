@@ -208,20 +208,14 @@ class CalcModel extends Observable {
 class CalcForm extends JTextField implements ActionListener {
     private CalcModel calcmodel;
 
-    // コンストラクタ
     public CalcForm(CalcModel cm)
     {
         super(10);
         calcmodel = cm;
-        // calcmodel.addObserver(this); //Observerの登録
         this.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 26));
         this.addActionListener(this);
     }
 
-    /*public void update (Observable o,Object arg){
-    String s=calcmodel.getValue();
-    setText(s);
-    }*/
     public void actionPerformed(ActionEvent e)
     {
         String s = this.getText();
