@@ -119,7 +119,6 @@ class CalcModel extends Observable {
         }
     }
 
-    // 答えを入力してもらって確認する
     public String check_answer()
     {
         String reply    = value.toUpperCase(); // 入力された16進数が小文字でも正解と判定するため
