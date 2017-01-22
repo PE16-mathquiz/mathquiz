@@ -1,13 +1,12 @@
-import javax.swing.*;
+﻿import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.util.Random;
 
-class CalcModel extends Observable{
+class CalcModel extends Observable {
     private String value;
-
-    //ここから先、コピーしたものになります。
+    // ここから先、コピーしたものになります。
 
     private int dec_int;
     private String dec;
@@ -15,386 +14,393 @@ class CalcModel extends Observable{
     private String oct;
     private String hex;
 
-    //問題の形式をきめるフラグ
-    //2:２進数 8:8進数 10:10進数 16:16進数
+    // 問題の形式をきめるフラグ
     private int que;
     private int sol;
 
-    //問題文を入れる変数
+    // 問題文を入れる変数
     private String quejp;
     private String quenum;
     private String answer;
 
+    private int qcount = 0;
+    private int ccount = 0;
 
-    private int qcount=0;
-
-
-    private int ccount=0;
-
-    //コンストラクタ(基数が既定の場合)
-    public CalcModel(int q, int s){
-    	this.que = q;
-		this.sol = s;
-
-		this.reset();
+    // コンストラクタ(基数が既定の場合)
+    public CalcModel(int q, int s)
+    {
+        this.que = q;
+        this.sol = s;
+        this.reset();
     }
 
-    //コンストラクタ(基数が未定の場合)
-    public CalcModel(){
-    	this.ran_base();
+    // コンストラクタ(基数が未定の場合)
+    public CalcModel()
+    {
+        this.ran_base();
     }
 
-
-    public void set_base(int q, int s){
-    	this.que = q;
-    	this.sol = s;
+    public void set_base(int q, int s)
+    {
+        this.que = q;
+        this.sol = s;
     }
 
-    public String get_quejp(){
-    	return quejp;
-    }
-    public String get_quenum(){
-    	return quenum;
-    }
-   	public String get_answer(){
-   		return answer;
-   	}
-    public int get_ccount(){
-    	return ccount;
-    }
-    public int get_qcount(){
-    	return qcount;
+    public String get_quejp()
+    {
+        return quejp;
     }
 
-    //print関数
-    public void print_all(){
-	System.out.println("10進数: " + dec);
-	System.out.println(" 2進数: " + bin);
-	System.out.println(" 8進数: " + oct);
-	System.out.println("16進数: " + hex);
+    public String get_quenum()
+    {
+        return quenum;
     }
 
-    //問題をリセットする関数(コンストラクタでも使用)
-    public void reset(){
-    	dec_int = (int)(Math.random() * Math.pow(2, 10));
-	dec = String.valueOf(dec_int);
-	bin = Integer.toBinaryString(dec_int);
-	oct = Integer.toOctalString(dec_int);
-	hex = Integer.toHexString(dec_int).toUpperCase();
-	quejp = String.format("次の%d進数を%d進数に変換しなさい", que, sol);
-
-	quenum = "none";
-	switch(que){
-	case 2:
-	    quenum = String.format("%10s", bin).replace(' ', '0');
-	    break;
-	case 8:
-	    quenum = "0" + oct;
-	    break;
-	case 10:
-	    quenum = dec;
-	    break;
-	case 16:
-	    quenum = "0x" + hex;
-	    break;
-	}
-
-	answer = "none";
-	switch(sol){
-	case 2:
-	    answer = bin;
-	    break;
-	case 8:
-	    answer = oct;
-	    break;
-	case 10:
-	    answer = dec;
-	    break;
-	case 16:
-	    answer = hex;
-	    break;
-	}
+    public String get_answer()
+    {
+        return answer;
     }
 
-    //答えを入力してもらって確認する
-    public String ans_q(){
-    	String reply = value.toUpperCase();  //入力された16進数が小文字でも正解と判定するため
-	String correct="正解！！";//ActionListener煮かえすための文字列
-	String Ncorrect="不正解..";//同上
-
-	if(sol == 16 && reply.startsWith("0X")){
-	    reply = reply.substring(2);
-	}
-	else if(sol == 8 && reply.startsWith("0")){
-	    reply = reply.substring(1);
-	}
-
-	qcount++;
-
-	if(reply.equals(answer)){
-	    ccount++;
-	    return correct;
-	}
-	else{
-	    return Ncorrect;
-	}
+    public int get_ccount()
+    {
+        return ccount;
     }
 
-    //基数をランダムで代入する関数
-    public void ran_base(){
-    	int qbase = -1, sbase = -1;
-    	int qran = (int)(Math.random() * 4); //0 ~ 3までの乱数
-    	int sran = (int)(Math.random() * 3); //0 ~ 2までの乱数
-
-    	switch(qran){
-    		case 0:
-    			qbase = 2; //問題の基数: 2進数
-    			switch(sran){
-    				case 0:
-    					sbase = 8; //答えの基数: 8進数
-    					break;
-    				case 1:
-    					sbase = 10; //答えの基数: 10進数
-    					break;
-    				case 2:
-    					sbase = 16; //答えの基数: 16進数
-    					break;
-    			}
-    			break;
-    		case 1:
-    			qbase = 8; //問題の基数: 8進数
-    			switch(sran){
-    				case 0:
-    					sbase = 2; //答えの基数: 2進数
-    					break;
-    				case 1:
-    					sbase = 10; //答えの基数: 10進数
-    					break;
-    				case 2:
-    					sbase = 16; //答えの基数: 16進数
-    					break;
-    			}
-    			break;
-    		case 2:
-    			qbase = 10; //問題の基数: 10進数
-    			switch(sran){
-    				case 0:
-    					sbase = 2; //答えの基数: 2進数
-    					break;
-    				case 1:
-    					sbase = 8; //答えの基数: 8進数
-    					break;
-    				case 2:
-    					sbase = 16; //答えの基数: 16進数
-    					break;
-    			}
-    			break;
-    		case 3:
-    			qbase = 16; //問題の基数: 16進数
-    			switch(sran){
-    				case 0:
-    					sbase = 2; //答えの基数: 2進数
-    					break;
-    				case 1:
-    					sbase = 8; //答えの基数: 8進数
-    					break;
-    				case 2:
-    					sbase = 10; //答えの基数: 10進数
-    					break;
-    			}
-    			break;
-    	}
-
-    	this.set_base(qbase, sbase);
-    	this.reset();
-
-    	return;
+    public int get_qcount()
+    {
+        return qcount;
     }
 
-    //ここまで
-
-
-    public String getValue(){
-	return value;
+    // print関数
+    public void print_all()
+    {
+        System.out.println("10進数: " + dec);
+        System.out.println(" 2進数: " + bin);
+        System.out.println(" 8進数: " + oct);
+        System.out.println("16進数: " + hex);
     }
 
-    public void setValue(String s){
-	value=s; //String出処理をするため直す必要なし。
-	//System.out.println(value); //valueに値が入っているかの確認。ターミナル上に表示。
+    // 問題をリセットする関数(コンストラクタでも使用)
+    public void reset()
+    {
+        dec_int = (int) (Math.random() * Math.pow(2, 10));
+        dec     = String.valueOf(dec_int);
+        bin     = Integer.toBinaryString(dec_int);
+        oct     = Integer.toOctalString(dec_int);
+        hex     = Integer.toHexString(dec_int).toUpperCase();
+        quejp   = String.format("次の%d進数を%d進数に変換しなさい", que, sol);
+        quenum  = "none";
+        switch (que) {
+            case 2:
+                quenum = String.format("%10s", bin).replace(' ', '0');
+                break;
+            case 8:
+                quenum = "0" + oct;
+                break;
+            case 10:
+                quenum = dec;
+                break;
+            case 16:
+                quenum = "0x" + hex;
+                break;
+        }
+        answer = "none";
+        switch (sol) {
+            case 2:
+                answer = bin;
+                break;
+            case 8:
+                answer = oct;
+                break;
+            case 10:
+                answer = dec;
+                break;
+            case 16:
+                answer = hex;
+                break;
+        }
+    }
 
-	setChanged();
-	notifyObservers();
+    // 答えを入力してもらって確認する
+    public String ans_q()
+    {
+        String reply    = value.toUpperCase(); // 入力された16進数が小文字でも正解と判定するため
+        String correct  = "正解！！"; // ActionListener煮かえすための文字列
+        String Ncorrect = "不正解.."; //同上
+        if (sol == 16 && reply.startsWith("0X")) {
+            reply = reply.substring(2);
+        }
+        else if (sol == 8 && reply.startsWith("0")) {
+            reply = reply.substring(1);
+        }
+        qcount++;
+        if (reply.equals(answer)) {
+            ccount++;
+
+            return correct;
+        }
+        else {
+            return Ncorrect;
+        }
+    }
+
+    // 基数をランダムで代入する関数
+    public void ran_base()
+    {
+        int qbase = -1, sbase = -1;
+        int qran = (int) (Math.random() * 4); // 0 ~ 3までの乱数
+        int sran = (int) (Math.random() * 3); // 0 ~ 2までの乱数
+
+        switch (qran) {
+            case 0:
+                qbase = 2; // 問題の基数: 2進数
+                switch (sran) {
+                    case 0:
+                        sbase = 8; // 答えの基数: 8進数
+                        break;
+                    case 1:
+                        sbase = 10; // 答えの基数: 10進数
+                        break;
+                    case 2:
+                        sbase = 16; // 答えの基数: 16進数
+                        break;
+                }
+                break;
+            case 1:
+                qbase = 8; // 問題の基数: 8進数
+                switch (sran) {
+                    case 0:
+                        sbase = 2; // 答えの基数: 2進数
+                        break;
+                    case 1:
+                        sbase = 10; // 答えの基数: 10進数
+                        break;
+                    case 2:
+                        sbase = 16; // 答えの基数: 16進数
+                        break;
+                }
+                break;
+            case 2:
+                qbase = 10; // 問題の基数: 10進数
+                switch (sran) {
+                    case 0:
+                        sbase = 2; // 答えの基数: 2進数
+                        break;
+                    case 1:
+                        sbase = 8; // 答えの基数: 8進数
+                        break;
+                    case 2:
+                        sbase = 16; // 答えの基数: 16進数
+                        break;
+                }
+                break;
+            case 3:
+                qbase = 16; // 問題の基数: 16進数
+                switch (sran) {
+                    case 0:
+                        sbase = 2; // 答えの基数: 2進数
+                        break;
+                    case 1:
+                        sbase = 8; // 答えの基数: 8進数
+                        break;
+                    case 2:
+                        sbase = 10; // 答えの基数: 10進数
+                        break;
+                }
+                break;
+        }
+
+        this.set_base(qbase, sbase);
+        this.reset();
+    }
+
+    public String getValue()
+    {
+        return value;
+    }
+
+    public void setValue(String s)
+    {
+        value = s; // String出処理をするため直す必要なし。
+        // System.out.println(value); //valueに値が入っているかの確認。ターミナル上に表示。
+        setChanged();
+        notifyObservers();
     }
 }
 
 
 
-//入力フォームの前身
-class CalcForm extends JTextField implements ActionListener{
+// 入力フォームの前身
+class CalcForm extends JTextField implements ActionListener {
     private CalcModel calcmodel;
 
-    //コンストラクタ
-    public CalcForm(CalcModel cm){
-	super(10);
-	calcmodel=cm;
-	//calcmodel.addObserver(this); //Observerの登録
-	this.setFont(new Font(Font.SANS_SERIF,Font.BOLD,26));
-	this.addActionListener(this);
+    // コンストラクタ
+    public CalcForm(CalcModel cm)
+    {
+        super(10);
+        calcmodel = cm;
+        // calcmodel.addObserver(this); //Observerの登録
+        this.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 26));
+        this.addActionListener(this);
     }
 
     /*public void update (Observable o,Object arg){
-	String s=calcmodel.getValue();
-	setText(s);
-	}*/
-
-    public void actionPerformed(ActionEvent e){
-		String s=this.getText();
-		calcmodel.setValue(s);
-		this.setEditable(false);
+    String s=calcmodel.getValue();
+    setText(s);
+    }*/
+    public void actionPerformed(ActionEvent e)
+    {
+        String s = this.getText();
+        calcmodel.setValue(s);
+        this.setEditable(false);
     }
 }
 
-//とりあえずの枠組み
-class CalcView extends JFrame implements Observer,ActionListener{
+// とりあえずの枠組み
+class CalcView extends JFrame implements Observer, ActionListener {
     private boolean IsTitle;
-    //private CalcModel calcmodel=new CalcModel(10,16);
-    private CalcModel calcmodel=new CalcModel();
-    private CalcForm calcform = new CalcForm(calcmodel);
-    //private CalcButton calcbutton=new CalcButton();
-    private String quejp,quenum;//問題文と出題内容の変数
-    private JLabel qlabel, nlabel;//問題文, 変換する数を表示するためのラベル変数
-    private JLabel clabel;//正誤判定を表示するためのラベル変数
-    private JLabel alabel; //正解を表示するラベル
-    private JLabel colabel; //正答率を表示するためのラベル
-    private JButton cont,fin,stat;//継続終了を選択するためのボタン変数
+    // private CalcModel calcmodel=new CalcModel(10,16);
+    private CalcModel calcmodel = new CalcModel();
+    private CalcForm calcform   = new CalcForm(calcmodel);
+    // private CalcButton calcbutton=new CalcButton();
+    private String quejp, quenum; // 問題文と出題内容の変数
+    private JLabel qlabel, nlabel; // 問題文, 変換する数を表示するためのラベル変数
+    private JLabel clabel; // 正誤判定を表示するためのラベル変数
+    private JLabel alabel; // 正解を表示するラベル
+    private JLabel colabel; // 正答率を表示するためのラベル
+    private JButton cont, fin, stat; // 継続終了を選択するためのボタン変数
     private JPanel p1 = new JPanel();
     private JPanel p2 = new JPanel();
-    private JPanel p3=new JPanel();
-    private JPanel p4=new JPanel();
+    private JPanel p3 = new JPanel();
+    private JPanel p4 = new JPanel();
 
-    //コンストラクタ
-    public CalcView(){
-	quejp=calcmodel.get_quejp();
-	quenum=calcmodel.get_quenum();
+    // コンストラクタ
+    public CalcView()
+    {
+        quejp  = calcmodel.get_quejp();
+        quenum = calcmodel.get_quenum();
 
-	qlabel=new JLabel(quejp);
-	nlabel = new JLabel(quenum);
-	clabel=new JLabel("計算クイズ");
-	alabel=new JLabel();
-	colabel=new JLabel();
-	qlabel.setFont(new Font(Font.SANS_SERIF,Font.BOLD,18));
-	nlabel.setFont(new Font(Font.SANS_SERIF,Font.BOLD,18));
-	clabel.setFont(new Font(Font.MONOSPACED,Font.BOLD,25));
-	alabel.setFont(new Font(Font.DIALOG, Font.PLAIN, 20));
-	colabel.setFont(new Font(Font.DIALOG, Font.PLAIN, 17));
+        qlabel  = new JLabel(quejp);
+        nlabel  = new JLabel(quenum);
+        clabel  = new JLabel("計算クイズ");
+        alabel  = new JLabel();
+        colabel = new JLabel();
+        qlabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
+        nlabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
+        clabel.setFont(new Font(Font.MONOSPACED, Font.BOLD, 25));
+        alabel.setFont(new Font(Font.DIALOG, Font.PLAIN, 20));
+        colabel.setFont(new Font(Font.DIALOG, Font.PLAIN, 17));
 
-	this.setTitle("Calculation Quiz");
-	this.setLayout(new GridLayout(4,1));
-	this.add(p1);
-	this.add(p2);
-	this.add(p3);
-	this.add(p4);
-	IsTitle = true;
-	calcmodel.addObserver(this);
-	//1段目:問題文
-	p1.setLayout(new GridLayout(2, 1));
-	qlabel.setHorizontalAlignment(JLabel.CENTER);
-	nlabel.setHorizontalAlignment(JLabel.CENTER);
-	p1.add(qlabel);
-	p1.add(nlabel);
-	//2段目:問題回答フォーム
-	p2.add(calcform);
-	//3段目:説明文、正答率の表示
-	p3.setLayout(new GridLayout(2, 1));
-	clabel.setHorizontalAlignment(JLabel.CENTER);
-	alabel.setHorizontalAlignment(JLabel.CENTER);
-	p3.add(clabel);
-	p3.add(alabel);
-	//4段目: 正答率の表示
-	colabel.setHorizontalAlignment(JLabel.CENTER);
-	p4.add(colabel);
-	//2段目: 選択ボタンの設置
-	fin=new JButton("終了");
-	stat=new JButton("開始");
-	cont=new JButton("続ける");
+        this.setTitle("Calculation Quiz");
+        this.setLayout(new GridLayout(4, 1));
+        this.add(p1);
+        this.add(p2);
+        this.add(p3);
+        this.add(p4);
+        IsTitle = true;
+        calcmodel.addObserver(this);
+        // 1段目:問題文
+        p1.setLayout(new GridLayout(2, 1));
+        qlabel.setHorizontalAlignment(JLabel.CENTER);
+        nlabel.setHorizontalAlignment(JLabel.CENTER);
+        p1.add(qlabel);
+        p1.add(nlabel);
+        // 2段目:問題回答フォーム
+        p2.add(calcform);
+        // 3段目:説明文、正答率の表示
+        p3.setLayout(new GridLayout(2, 1));
+        clabel.setHorizontalAlignment(JLabel.CENTER);
+        alabel.setHorizontalAlignment(JLabel.CENTER);
+        p3.add(clabel);
+        p3.add(alabel);
+        // 4段目: 正答率の表示
+        colabel.setHorizontalAlignment(JLabel.CENTER);
+        p4.add(colabel);
+        // 2段目: 選択ボタンの設置
+        fin  = new JButton("終了");
+        stat = new JButton("開始");
+        cont = new JButton("続ける");
 
-	p2.add(cont);
-	cont.setActionCommand("continue");
-	p2.add(fin);
-	p2.add(stat);
-	fin.setActionCommand("finish");
-	stat.setActionCommand("stat");
-	fin.addActionListener(this);
-	cont.addActionListener(this);
-	stat.addActionListener(this);
-	this.pack();
-	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	this.setVisible(true);
-	cont.setVisible(false);
-	p1.setVisible(false);
-	calcform.setVisible(false);
+        p2.add(cont);
+        cont.setActionCommand("continue");
+        p2.add(fin);
+        p2.add(stat);
+        fin.setActionCommand("finish");
+        stat.setActionCommand("stat");
+        fin.addActionListener(this);
+        cont.addActionListener(this);
+        stat.addActionListener(this);
+        this.pack();
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setVisible(true);
+        cont.setVisible(false);
+        p1.setVisible(false);
+        calcform.setVisible(false);
     }
 
-    public void update(Observable o,Object arg){
-		this.clabel.setText(calcmodel.ans_q());
-		alabel.setText("正解は" + calcmodel.get_answer());
-		cont.setEnabled(true);
-    }
-    public void questioninit(){
-	calcmodel.ran_base();
-	if(IsTitle == false){
-		String car = String.format("%.2f", (float)calcmodel.get_ccount() / (float)calcmodel.get_qcount() * 100);
-	    this.qlabel.setText(calcmodel.get_quejp());
-	    this.nlabel.setText(calcmodel.get_quenum());
-	    clabel.setText("答えを入力したらEnterを押して下さい。");
-	    alabel.setText("");
-	    colabel.setText("正答率: " + calcmodel.get_ccount() + "/" + calcmodel.get_qcount() + "=" + car + "%" );
-
-	    calcform.setEditable(true);
-	}
-	calcform.setText("");
-	cont.setEnabled(false);
-
-	/*処理を一時停止させるための部分
-	  try{
-	  Thread.sleep(5000);
-	  }catch(InterruptedException ee){}
-	*/
-	//new CalcView();
-}
-
-
-  //継続or終了ActionListener
-    public void actionPerformed(ActionEvent e){
-	String es=e.getActionCommand();
-	if(es.equals("finish")){//終了ボタンを押した場合
-	    //this.qlabel.setText(calcmodel.ans_q());
-
-	    //終了を押したときにシステムをすべて落とすためのコード
-	        //→終了もスペースキーで回答を確定していなければできない模様。
-	    Component c = (Component)e.getSource();
-	    Window w = SwingUtilities.getWindowAncestor(c);
-	    w.dispose();
-
-	}else if(es.equals("continue") && IsTitle == false){//継続ボタンを押した場合
-	    //calcmodel.reset();
-	    questioninit();
-	}
-	else{//開始ボタンを押した場合
-	    IsTitle = false;
-	    cont.setVisible(true);
-	    stat.setVisible(false);
-	    calcform.setVisible(true);
-	    // 引用元: https://goo.gl/mCnVKh
-	    cont.setEnabled(false);
-	    clabel.setText("答えを入力したらEnterを押して下さい。");
-	    clabel.setFont(new Font(Font.SANS_SERIF,Font.BOLD,17));
-	    p1.setVisible(true);
-	}
+    public void update(Observable o, Object arg)
+    {
+        this.clabel.setText(calcmodel.ans_q());
+        alabel.setText("正解は" + calcmodel.get_answer());
+        cont.setEnabled(true);
     }
 
-    public static void main (String args[]){
-	new CalcView();
+    public void questioninit()
+    {
+        calcmodel.ran_base();
+        if (IsTitle == false) {
+            String car = String.format("%.2f", (float) calcmodel.get_ccount() / (float) calcmodel.get_qcount() * 100);
+            this.qlabel.setText(calcmodel.get_quejp());
+            this.nlabel.setText(calcmodel.get_quenum());
+            clabel.setText("答えを入力したらEnterを押して下さい。");
+            alabel.setText("");
+            colabel.setText("正答率: " + calcmodel.get_ccount() + "/" + calcmodel.get_qcount() + "=" + car + "%");
+
+            calcform.setEditable(true);
+        }
+        calcform.setText("");
+        cont.setEnabled(false);
+
+        /*処理を一時停止させるための部分
+          try{
+          Thread.sleep(5000);
+          }catch(InterruptedException ee){}
+        */
+        // new CalcView();
+    }
+
+    // 継続or終了ActionListener
+    public void actionPerformed(ActionEvent e)
+    {
+        String es = e.getActionCommand();
+        if (es.equals("finish")) { // 終了ボタンを押した場合
+            // this.qlabel.setText(calcmodel.ans_q());
+
+            // 終了を押したときにシステムをすべて落とすためのコード
+            // →終了もスペースキーで回答を確定していなければできない模様。
+            Component c = (Component) e.getSource();
+            Window    w = SwingUtilities.getWindowAncestor(c);
+            w.dispose();
+        } else if (es.equals("continue") && IsTitle == false) { // 継続ボタンを押した場合
+            // calcmodel.reset();
+            questioninit();
+        }
+        else { // 開始ボタンを押した場合
+            IsTitle = false;
+            cont.setVisible(true);
+            stat.setVisible(false);
+            calcform.setVisible(true);
+            // 引用元: https://goo.gl/mCnVKh
+            cont.setEnabled(false);
+            clabel.setText("答えを入力したらEnterを押して下さい。");
+            clabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 17));
+            p1.setVisible(true);
+        }
+    }
+
+    public static void main(String args[])
+    {
+        new CalcView();
     }
 }
 
