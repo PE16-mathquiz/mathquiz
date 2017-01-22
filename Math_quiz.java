@@ -117,7 +117,6 @@ class CalcModel extends Observable {
                 answer = hex;
                 break;
         }
-        System.out.println(sol);
     }
 
     public String check_answer()
