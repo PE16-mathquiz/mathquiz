@@ -338,7 +338,6 @@ class CalcView extends JFrame implements Observer, ActionListener {
         // new CalcView();
     }
 
-    // 継続or終了ActionListener
     public void actionPerformed(ActionEvent e)
     {
         String es = e.getActionCommand();
