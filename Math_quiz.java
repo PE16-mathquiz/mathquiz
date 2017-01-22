@@ -401,5 +401,4 @@ class CalcView extends JFrame implements Observer, ActionListener {
 
 とりあえず問題出題→回答入力(スペースキーで確定)→次へボタンを押して次のランダム問題出題→......
 まではものになりました。
-
  */
