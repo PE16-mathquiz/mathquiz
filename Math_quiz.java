@@ -9,11 +9,12 @@ class CalcModel extends Observable {
     private int dec_int;
     private String dec, bin, oct, hex;
 
-    private int que, sol; // 問題形式指定
+    private int que, sol, q_base, a_base; // 問題形式指定
 
     private String quejp, quenum, answer;
 
     private int qcount = 0, ccount = 0;
+
 
     // 基数既定時
     public CalcModel(int q, int s)
@@ -63,41 +64,34 @@ class CalcModel extends Observable {
     public void reset()
     {
         dec_int = (int) (Math.random() * Math.pow(2, 10));
-        dec     = String.valueOf(dec_int);
         bin     = Integer.toBinaryString(dec_int);
         oct     = Integer.toOctalString(dec_int);
+        dec     = String.valueOf(dec_int);
         hex     = Integer.toHexString(dec_int).toUpperCase();
-        quejp   = String.format("次の%d進数を%d進数に変換しなさい", que, sol);
+        String nums[] = new String[4];
+        nums[0] = bin; nums[1] = oct; nums[2] = dec; nums[3] = hex;
+        int bases[] = new int[4];
+        bases[0] = 2; bases[1] = 8; bases[2] = 10; bases[3] = 16;
+        quejp = String.format("次の%d進数を%d進数に変換しなさい", bases[que], bases[sol]);
         quenum  = "none";
+
         switch (que) {
+            case 0:
+                quenum = String.format("%10s", nums[que]).replace(' ', '0');
+                break;
+            case 1:
+                quenum = "0" + nums[que];
+                break;
             case 2:
-                quenum = String.format("%10s", bin).replace(' ', '0');
+                quenum = nums[que];
                 break;
-            case 8:
-                quenum = "0" + oct;
-                break;
-            case 10:
-                quenum = dec;
-                break;
-            case 16:
-                quenum = "0x" + hex;
+            case 3:
+                quenum = "0x" + nums[que];
                 break;
         }
         answer = "none";
-        switch (sol) {
-            case 2:
-                answer = bin;
-                break;
-            case 8:
-                answer = oct;
-                break;
-            case 10:
-                answer = dec;
-                break;
-            case 16:
-                answer = hex;
-                break;
-        }
+        System.out.println(sol);
+        answer = nums[sol];
     }
 
     public String check_answer()
@@ -123,15 +117,11 @@ class CalcModel extends Observable {
 
     public void rand_base()
     {
-        int qbase = -1, sbase = -1;
+        int sbase;
         int qran = (int) (Math.random() * 4); // 0 ~ 3までの乱数
         int sran = (int) (Math.random() * 3) + 1; // 被り防止のため1足して1 ~ 3
-        int bases[] = new int[4];
-        bases[0] = 2; bases[1] = 8; bases[2] = 10; bases[3] = 16;
-
-        qbase = bases[qran];
-        sbase = bases[(sran + qran) % 4];
-        this.set_base(qbase, sbase);
+        sbase = (qran + sran) % 4;
+        this.set_base(qran, sbase);
         this.reset();
     }
 
