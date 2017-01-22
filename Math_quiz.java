@@ -71,7 +71,6 @@ class CalcModel extends Observable {
         return qcount;
     }
 
-    // print関数
     public void print_all()
     {
         System.out.println("10進数: " + dec);
@@ -80,7 +79,6 @@ class CalcModel extends Observable {
         System.out.println("16進数: " + hex);
     }
 
-    // 問題をリセットする関数(コンストラクタでも使用)
     public void reset()
     {
         dec_int = (int) (Math.random() * Math.pow(2, 10));
