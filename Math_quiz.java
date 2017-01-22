@@ -15,7 +15,7 @@ class CalcModel extends Observable {
 
     private int qcount = 0, ccount = 0;
 
-    // コンストラクタ(基数が既定の場合)
+    // 基数既定時
     public CalcModel(int q, int s)
     {
         this.que = q;
@@ -23,7 +23,7 @@ class CalcModel extends Observable {
         this.reset();
     }
 
-    // コンストラクタ(基数が未定の場合)
+    // 基数未定時
     public CalcModel()
     {
         this.rand_base();
@@ -208,20 +208,14 @@ class CalcModel extends Observable {
 class CalcForm extends JTextField implements ActionListener {
     private CalcModel calcmodel;
 
-    // コンストラクタ
     public CalcForm(CalcModel cm)
     {
         super(10);
         calcmodel = cm;
-        // calcmodel.addObserver(this); //Observerの登録
         this.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 26));
         this.addActionListener(this);
     }
 
-    /*public void update (Observable o,Object arg){
-    String s=calcmodel.getValue();
-    setText(s);
-    }*/
     public void actionPerformed(ActionEvent e)
     {
         String s = this.getText();
@@ -230,25 +224,20 @@ class CalcForm extends JTextField implements ActionListener {
     }
 }
 
-// とりあえずの枠組み
+
 class CalcView extends JFrame implements Observer, ActionListener {
     private boolean IsTitle;
-    // private CalcModel calcmodel=new CalcModel(10,16);
     private CalcModel calcmodel = new CalcModel();
-    private CalcForm calcform   = new CalcForm(calcmodel);
-    // private CalcButton calcbutton=new CalcButton();
-    private String quejp, quenum; // 問題文と出題内容の変数
-    private JLabel qlabel, nlabel; // 問題文, 変換する数を表示するためのラベル変数
-    private JLabel clabel; // 正誤判定を表示するためのラベル変数
-    private JLabel alabel; // 正解を表示するラベル
-    private JLabel colabel; // 正答率を表示するためのラベル
-    private JButton cont, fin, stat; // 継続終了を選択するためのボタン変数
-    private JPanel p1 = new JPanel();
-    private JPanel p2 = new JPanel();
-    private JPanel p3 = new JPanel();
-    private JPanel p4 = new JPanel();
+    private CalcForm  calcform  = new CalcForm(calcmodel);
+    private String quejp, quenum;
+    private JLabel qlabel, nlabel;
+    private JLabel clabel; // 正誤判定
+    private JLabel alabel; // 正解表示
+    private JLabel colabel; // 正答率
+    private JButton cont, fin, stat;
+    private JPanel p1 = new JPanel(), p2 = new JPanel();
+    private JPanel p3 = new JPanel(), p4 = new JPanel();
 
-    // コンストラクタ
     public CalcView()
     {
         quejp  = calcmodel.get_quejp();
@@ -273,42 +262,43 @@ class CalcView extends JFrame implements Observer, ActionListener {
         this.add(p4);
         IsTitle = true;
         calcmodel.addObserver(this);
-        // 1段目:問題文
+
         p1.setLayout(new GridLayout(2, 1));
         qlabel.setHorizontalAlignment(JLabel.CENTER);
         nlabel.setHorizontalAlignment(JLabel.CENTER);
         p1.add(qlabel);
         p1.add(nlabel);
-        // 2段目:問題回答フォーム
+
         p2.add(calcform);
-        // 3段目:説明文、正答率の表示
+        fin  = new JButton("終了");
+        stat = new JButton("開始");
+        cont = new JButton("続ける");
+        fin.setActionCommand("finish");
+        stat.setActionCommand("stat");
+        cont.setActionCommand("continue");
+        fin.addActionListener(this);
+        cont.addActionListener(this);
+        stat.addActionListener(this);
+        p2.add(cont);
+        p2.add(fin);
+        p2.add(stat);
+
         p3.setLayout(new GridLayout(2, 1));
         clabel.setHorizontalAlignment(JLabel.CENTER);
         alabel.setHorizontalAlignment(JLabel.CENTER);
         p3.add(clabel);
         p3.add(alabel);
-        // 4段目: 正答率の表示
+
         colabel.setHorizontalAlignment(JLabel.CENTER);
         p4.add(colabel);
-        // 2段目: 選択ボタンの設置
-        fin  = new JButton("終了");
-        stat = new JButton("開始");
-        cont = new JButton("続ける");
 
-        p2.add(cont);
-        cont.setActionCommand("continue");
-        p2.add(fin);
-        p2.add(stat);
-        fin.setActionCommand("finish");
-        stat.setActionCommand("stat");
-        fin.addActionListener(this);
-        cont.addActionListener(this);
-        stat.addActionListener(this);
         this.pack();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
-        cont.setVisible(false);
+
+        // これらは開始時にtrueとなる
         p1.setVisible(false);
+        cont.setVisible(false);
         calcform.setVisible(false);
     }
 
@@ -322,53 +312,36 @@ class CalcView extends JFrame implements Observer, ActionListener {
     public void questioninit()
     {
         calcmodel.rand_base();
-        if (IsTitle == false) {
-            String car = String.format("%.2f", (float) calcmodel.get_ccount() / (float) calcmodel.get_qcount() * 100);
-            this.qlabel.setText(calcmodel.get_quejp());
-            this.nlabel.setText(calcmodel.get_quenum());
-            clabel.setText("答えを入力したらEnterを押して下さい。");
-            alabel.setText("");
-            colabel.setText("正答率: " + calcmodel.get_ccount() + "/" + calcmodel.get_qcount() + "=" + car + "%");
-
-            calcform.setEditable(true);
-        }
+        String car = String.format("%.2f", (float) calcmodel.get_ccount() / (float) calcmodel.get_qcount() * 100);
+        this.qlabel.setText(calcmodel.get_quejp());
+        this.nlabel.setText(calcmodel.get_quenum());
+        clabel.setText("答えを入力したらEnterを押して下さい。");
+        alabel.setText("");
+        colabel.setText("正答率: " + calcmodel.get_ccount() + "/" + calcmodel.get_qcount() + "=" + car + "%");
+        calcform.setEditable(true);
         calcform.setText("");
         cont.setEnabled(false);
-
-        /*処理を一時停止させるための部分
-          try{
-          Thread.sleep(5000);
-          }catch(InterruptedException ee){}
-        */
-        // new CalcView();
     }
 
-    // 継続or終了ActionListener
     public void actionPerformed(ActionEvent e)
     {
         String es = e.getActionCommand();
-        if (es.equals("finish")) { // 終了ボタンを押した場合
-            // this.qlabel.setText(calcmodel.check_answer());
-
-            // 終了を押したときにシステムをすべて落とすためのコード
-            // →終了もスペースキーで回答を確定していなければできない模様。
+        if (es.equals("finish")) {
+            // Shutdown Sequence
             Component c = (Component) e.getSource();
             Window    w = SwingUtilities.getWindowAncestor(c);
             w.dispose();
-        } else if (es.equals("continue") && IsTitle == false) { // 継続ボタンを押した場合
-            // calcmodel.reset();
+        } else if (es.equals("continue")) {
             questioninit();
-        }
-        else { // 開始ボタンを押した場合
-            IsTitle = false;
+        } else {
+            // Start Sequence
+            p1.setVisible(true);
             cont.setVisible(true);
-            stat.setVisible(false);
             calcform.setVisible(true);
-            // 引用元: https://goo.gl/mCnVKh
+            stat.setVisible(false);
             cont.setEnabled(false);
             clabel.setText("答えを入力したらEnterを押して下さい。");
             clabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 17));
-            p1.setVisible(true);
         }
     }
 
