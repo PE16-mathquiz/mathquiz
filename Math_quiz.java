@@ -318,16 +318,13 @@ class CalcView extends JFrame implements Observer, ActionListener {
     public void questioninit()
     {
         calcmodel.rand_base();
-        if (IsTitle == false) {
-            String car = String.format("%.2f", (float) calcmodel.get_ccount() / (float) calcmodel.get_qcount() * 100);
-            this.qlabel.setText(calcmodel.get_quejp());
-            this.nlabel.setText(calcmodel.get_quenum());
-            clabel.setText("答えを入力したらEnterを押して下さい。");
-            alabel.setText("");
-            colabel.setText("正答率: " + calcmodel.get_ccount() + "/" + calcmodel.get_qcount() + "=" + car + "%");
-
-            calcform.setEditable(true);
-        }
+        String car = String.format("%.2f", (float) calcmodel.get_ccount() / (float) calcmodel.get_qcount() * 100);
+        this.qlabel.setText(calcmodel.get_quejp());
+        this.nlabel.setText(calcmodel.get_quenum());
+        clabel.setText("答えを入力したらEnterを押して下さい。");
+        alabel.setText("");
+        colabel.setText("正答率: " + calcmodel.get_ccount() + "/" + calcmodel.get_qcount() + "=" + car + "%");
+        calcform.setEditable(true);
         calcform.setText("");
         cont.setEnabled(false);
     }
