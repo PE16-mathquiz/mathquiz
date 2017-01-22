@@ -6,25 +6,14 @@ import java.util.Random;
 
 class CalcModel extends Observable {
     private String value;
-    // ここから先、コピーしたものになります。
-
     private int dec_int;
-    private String dec;
-    private String bin;
-    private String oct;
-    private String hex;
+    private String dec, bin, oct, hex;
 
-    // 問題の形式をきめるフラグ
-    private int que;
-    private int sol;
+    private int que, sol; // 問題の形式をきめるフラグ
 
-    // 問題文を入れる変数
-    private String quejp;
-    private String quenum;
-    private String answer;
+    private String quejp, quenum, answer; // 問題文を入れる変数
 
-    private int qcount = 0;
-    private int ccount = 0;
+    private int qcount = 0, ccount = 0;
 
     // コンストラクタ(基数が既定の場合)
     public CalcModel(int q, int s)
@@ -69,14 +58,6 @@ class CalcModel extends Observable {
     public int get_qcount()
     {
         return qcount;
-    }
-
-    public void print_all()
-    {
-        System.out.println("10進数: " + dec);
-        System.out.println(" 2進数: " + bin);
-        System.out.println(" 8進数: " + oct);
-        System.out.println("16進数: " + hex);
     }
 
     public void reset()
@@ -133,7 +114,6 @@ class CalcModel extends Observable {
         qcount++;
         if (reply.equals(answer)) {
             ccount++;
-
             return correct;
         }
         else {
@@ -141,16 +121,72 @@ class CalcModel extends Observable {
         }
     }
 
-
+    // 基数をランダムで代入する関数
     public void rand_base()
     {
         int qbase = -1, sbase = -1;
         int qran = (int) (Math.random() * 4); // 0 ~ 3までの乱数
-        int sran = (int) (Math.random() * 3) + 1; // 被り防止のため1足して1 ~ 3
-        int bases[] = new int[4]; // 基数を収容する配列
-        bases[0] = 2; bases[1] = 8; bases[2] = 10; bases[3] = 16;
-        qbase = bases[qran];
-        sbase = bases[(sran + qran) % 4];
+        int sran = (int) (Math.random() * 3); // 0 ~ 2までの乱数
+
+        switch (qran) {
+            case 0:
+                qbase = 2; // 問題の基数: 2進数
+                switch (sran) {
+                    case 0:
+                        sbase = 8; // 答えの基数: 8進数
+                        break;
+                    case 1:
+                        sbase = 10; // 答えの基数: 10進数
+                        break;
+                    case 2:
+                        sbase = 16; // 答えの基数: 16進数
+                        break;
+                }
+                break;
+            case 1:
+                qbase = 8; // 問題の基数: 8進数
+                switch (sran) {
+                    case 0:
+                        sbase = 2; // 答えの基数: 2進数
+                        break;
+                    case 1:
+                        sbase = 10; // 答えの基数: 10進数
+                        break;
+                    case 2:
+                        sbase = 16; // 答えの基数: 16進数
+                        break;
+                }
+                break;
+            case 2:
+                qbase = 10; // 問題の基数: 10進数
+                switch (sran) {
+                    case 0:
+                        sbase = 2; // 答えの基数: 2進数
+                        break;
+                    case 1:
+                        sbase = 8; // 答えの基数: 8進数
+                        break;
+                    case 2:
+                        sbase = 16; // 答えの基数: 16進数
+                        break;
+                }
+                break;
+            case 3:
+                qbase = 16; // 問題の基数: 16進数
+                switch (sran) {
+                    case 0:
+                        sbase = 2; // 答えの基数: 2進数
+                        break;
+                    case 1:
+                        sbase = 8; // 答えの基数: 8進数
+                        break;
+                    case 2:
+                        sbase = 10; // 答えの基数: 10進数
+                        break;
+                }
+                break;
+        }
+
         this.set_base(qbase, sbase);
         this.reset();
     }
@@ -162,8 +198,7 @@ class CalcModel extends Observable {
 
     public void setValue(String s)
     {
-        value = s; // String出処理をするため直す必要なし。
-        // System.out.println(value); //valueに値が入っているかの確認。ターミナル上に表示。
+        value = s;
         setChanged();
         notifyObservers();
     }
@@ -366,5 +401,4 @@ class CalcView extends JFrame implements Observer, ActionListener {
 
 とりあえず問題出題→回答入力(スペースキーで確定)→次へボタンを押して次のランダム問題出題→......
 まではものになりました。
-
  */
