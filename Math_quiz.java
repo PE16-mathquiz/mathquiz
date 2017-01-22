@@ -9,9 +9,9 @@ class CalcModel extends Observable {
     private int dec_int;
     private String dec, bin, oct, hex;
 
-    private int que, sol; // 問題の形式をきめるフラグ
+    private int que, sol; // 問題形式指定
 
-    private String quejp, quenum, answer; // 問題文を入れる変数
+    private String quejp, quenum, answer;
 
     private int qcount = 0, ccount = 0;
 
@@ -121,72 +121,16 @@ class CalcModel extends Observable {
         }
     }
 
-    // 基数をランダムで代入する関数
     public void rand_base()
     {
         int qbase = -1, sbase = -1;
         int qran = (int) (Math.random() * 4); // 0 ~ 3までの乱数
-        int sran = (int) (Math.random() * 3); // 0 ~ 2までの乱数
+        int sran = (int) (Math.random() * 3) + 1; // 被り防止のため1足して1 ~ 3
+        int bases[] = new int[4];
+        bases[0] = 2; bases[1] = 8; bases[2] = 10; bases[3] = 16;
 
-        switch (qran) {
-            case 0:
-                qbase = 2; // 問題の基数: 2進数
-                switch (sran) {
-                    case 0:
-                        sbase = 8; // 答えの基数: 8進数
-                        break;
-                    case 1:
-                        sbase = 10; // 答えの基数: 10進数
-                        break;
-                    case 2:
-                        sbase = 16; // 答えの基数: 16進数
-                        break;
-                }
-                break;
-            case 1:
-                qbase = 8; // 問題の基数: 8進数
-                switch (sran) {
-                    case 0:
-                        sbase = 2; // 答えの基数: 2進数
-                        break;
-                    case 1:
-                        sbase = 10; // 答えの基数: 10進数
-                        break;
-                    case 2:
-                        sbase = 16; // 答えの基数: 16進数
-                        break;
-                }
-                break;
-            case 2:
-                qbase = 10; // 問題の基数: 10進数
-                switch (sran) {
-                    case 0:
-                        sbase = 2; // 答えの基数: 2進数
-                        break;
-                    case 1:
-                        sbase = 8; // 答えの基数: 8進数
-                        break;
-                    case 2:
-                        sbase = 16; // 答えの基数: 16進数
-                        break;
-                }
-                break;
-            case 3:
-                qbase = 16; // 問題の基数: 16進数
-                switch (sran) {
-                    case 0:
-                        sbase = 2; // 答えの基数: 2進数
-                        break;
-                    case 1:
-                        sbase = 8; // 答えの基数: 8進数
-                        break;
-                    case 2:
-                        sbase = 10; // 答えの基数: 10進数
-                        break;
-                }
-                break;
-        }
-
+        qbase = bases[qran];
+        sbase = bases[(sran + qran) % 4];
         this.set_base(qbase, sbase);
         this.reset();
     }
