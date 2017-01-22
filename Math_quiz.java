@@ -9,11 +9,9 @@ class CalcModel extends Observable {
     private int dec_int;
     private String dec, bin, oct, hex;
 
-    // 問題の形式をきめるフラグ
-    private int que, sol;
+    private int que, sol; // 問題の形式をきめるフラグ
 
-    // 問題文を入れる変数
-    private String quejp, quenum, answer;
+    private String quejp, quenum, answer; // 問題文を入れる変数
 
     private int qcount = 0, ccount = 0;
 
