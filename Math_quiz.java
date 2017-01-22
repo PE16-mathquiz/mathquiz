@@ -117,6 +117,7 @@ class CalcModel extends Observable {
                 answer = hex;
                 break;
         }
+        System.out.println(sol);
     }
 
     public String check_answer()
@@ -149,12 +150,10 @@ class CalcModel extends Observable {
         int qran = (int) (Math.random() * 4); // 0 ~ 3までの乱数
         int sran = (int) (Math.random() * 3) + 1; // 被り防止のため1足して1 ~ 3
         int bases[] = new int[4]; // 基数を収容する配列
-        bases[0] = 2; bases[1] = 4; bases[2] = 8; bases[3] = 16;
+        bases[0] = 2; bases[1] = 8; bases[2] = 10; bases[3] = 16;
 
-        qbase = qbase[qran];
+        qbase = bases[qran];
         sbase = bases[(sran + qran) % 4];
-        
-
         this.set_base(qbase, sbase);
         this.reset();
     }
