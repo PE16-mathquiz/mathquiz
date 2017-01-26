@@ -1,8 +1,10 @@
 *.class
 *.jar
+*.txt
 .DS_Store
 
 ### Linux ###
 .*
 !.gitignore
 *~
+\#*
