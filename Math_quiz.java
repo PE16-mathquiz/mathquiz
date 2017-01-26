@@ -90,7 +90,6 @@ class CalcModel extends Observable {
                 break;
         }
         answer = "none";
-        System.out.println(sol);
         answer = nums[sol];
     }
 
@@ -194,7 +193,6 @@ class CalcView extends JFrame implements Observer, ActionListener {
         this.add(p2);
         this.add(p3);
         this.add(p4);
-        IsTitle = true;
         calcmodel.addObserver(this);
 
         p1.setLayout(new GridLayout(2, 1));
