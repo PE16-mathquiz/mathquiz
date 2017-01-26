@@ -99,12 +99,15 @@ class CalcModel extends Observable {
         String reply    = value.toUpperCase(); // 大文字小文字対応
         String correct  = "正解！！";
         String Ncorrect = "不正解.."; // ActionListenerへ返す
-        if (sol == 16 && reply.startsWith("0X")) {
+        
+        if (sol == 3 && reply.startsWith("0X")) {
             reply = reply.substring(2);
         }
-        else if (sol == 8 && reply.startsWith("0")) {
+        else if (sol == 1 && reply.startsWith("0")) {
             reply = reply.substring(1);
         }
+        
+        System.out.println(reply);
         qcount++;
         if (reply.equals(answer)) {
             ccount++;
