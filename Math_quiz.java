@@ -100,7 +100,7 @@ class CalcModel extends Observable {
         String correct  = "正解！！";
         String Ncorrect = "不正解.."; // ActionListenerへ返す
         
-        if (sol == 3 && reply.startsWith("0X")) {
+        if (sol == 3 && reply.startsWith("0X")) { //chenge
             reply = reply.substring(2);
         }
         else if (sol == 1 && reply.startsWith("0")) {
