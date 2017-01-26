@@ -107,7 +107,6 @@ class CalcModel extends Observable {
             reply = reply.substring(1);
         }
         
-        System.out.println(reply);
         qcount++;
         if (reply.equals(answer)) {
             ccount++;
