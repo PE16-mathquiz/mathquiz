@@ -91,7 +91,7 @@ class CalcModel extends Observable {
         }
         answer = "none";
         answer = nums[sol];
-	System.out.println(answer); // Show answer in order to demo
+		//System.out.println(answer);  Show answer in order to demo
     }
 
     public String check_answer()
