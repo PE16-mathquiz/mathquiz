@@ -2,6 +2,7 @@
 *.jar
 *.txt
 .DS_Store
+!Math_quiz.jar
 
 ### Linux ###
 .*
